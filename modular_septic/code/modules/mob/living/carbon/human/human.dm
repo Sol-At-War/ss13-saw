@@ -4,7 +4,6 @@
 	//values are quite low due to the way dirty clothing dirtifies you
 	set_germ_level(rand(GERM_LEVEL_START_MIN, GERM_LEVEL_START_MAX))
 	add_verb(src, /mob/living/carbon/human/proc/hide_furry_shit)
-	//hehe horny //FUCK YOURSELF RETARD
 	AddComponent(/datum/component/fixeye)
 	AddComponent(/datum/component/interactable)
 	AddComponent(/datum/component/babble)

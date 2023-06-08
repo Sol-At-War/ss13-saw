@@ -125,7 +125,7 @@
 #define BODY_ZONE_R_LEG "r_leg"
 #define BODY_ZONE_PRECISE_R_FOOT "r_foot"
 
-// ~retarded body zones
+// ~fingers and toes
 #define BODY_ZONE_PRECISE_R_FINGER_THUMB "r_thumb"
 #define BODY_ZONE_PRECISE_R_FINGER_INDEX "r_index_finger"
 #define BODY_ZONE_PRECISE_R_FINGER_MIDDLE "r_middle_finger"

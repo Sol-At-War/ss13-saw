@@ -226,8 +226,7 @@
 		playsound(src, 'modular_septic/sound/efn/resupply/failure.ogg', 65, FALSE)
 		return
 	if(!do_after(user, 0.2 SECONDS, target = src))
-		var/retarded = pick("Retarded.", "Fucking stupid.", "Fucked up.", "I'm a fucking lawyer.")
-		to_chat(user, span_bolddanger("[retarded]"))
+		to_chat(user, span_bolddanger("Fucking stupid"))
 		return
 	if(captagon)
 		user.transferItemToLoc(user, captagon)

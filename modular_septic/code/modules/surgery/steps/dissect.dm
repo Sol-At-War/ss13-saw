@@ -14,7 +14,7 @@
 
 /datum/surgery_step/dissect/validate_target(mob/living/target, mob/user)
 	. = ..()
-	if(!.) //nah nigga lol
+	if(!.) //nah lol
 		return FALSE
 	var/mob/living/carbon/C = target
 	var/obj/item/bodypart/BP = C.get_bodypart(user.zone_selected)

@@ -50,7 +50,6 @@ useless
 useful
 dumb
 smart
-retarded
 genius
 healthy
 sickly

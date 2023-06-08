@@ -50,7 +50,7 @@
 		difficulty -= 5
 	var/diceroll = diceroll(GET_MOB_SKILL_VALUE(src, SKILL_ACROBATICS)-difficulty, context = DICE_CONTEXT_MENTAL)
 	switch(diceroll)
-		//Lucky nigga
+		//Lucky
 		if(DICE_CRIT_SUCCESS)
 			visible_message(span_danger("<b>[src]</b> regroups as [p_they()] fall[p_they() in list("it", "they") ? "" : "s"] safely on [T]!"), \
 						span_userdanger("I fall down on [T], but regroup safely!"))

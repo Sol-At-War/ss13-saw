@@ -39,8 +39,8 @@
 	var/old_deathsound
 	/// Did we have the undead mob biotype?
 	var/was_undead = FALSE
-	/// Zombies can only speak in retardspeak, this keeps track of our retardspeak before infection
-	var/list/was_retarded
+	/// Zombies can only speak gibberish, this keeps track of if that was already how they spoke before infection
+	var/list/spoke_gibberish
 
 /datum/disease/zombification/Destroy()
 	if(stage >= 2)
@@ -130,7 +130,7 @@
 		was_undead = TRUE
 		affected_mob.mob_biotypes |= MOB_UNDEAD
 	if(!affected_mob.language_holder.has_language(/datum/language/aphasia, TRUE))
-		was_retarded = list(LAZYACCESS(affected_mob.language_holder.understood_languages, /datum/language/aphasia), \
+		spoke_gibberish = list(LAZYACCESS(affected_mob.language_holder.understood_languages, /datum/language/aphasia), \
 					LAZYACCESS(affected_mob.language_holder.spoken_languages, /datum/language/aphasia))
 		affected_mob.language_holder.understood_languages[/datum/language/aphasia] = list(LANGUAGE_ATOM)
 		affected_mob.language_holder.spoken_languages[/datum/language/aphasia] = list(LANGUAGE_ATOM)
@@ -173,12 +173,12 @@
 	UnregisterSignal(affected_mob, COMSIG_LIVING_TRY_PUT_IN_HAND)
 	if(!was_undead)
 		affected_mob.mob_biotypes &= ~MOB_UNDEAD
-	if(LAZYACCESS(was_retarded, 1))
-		affected_mob.language_holder.understood_languages[/datum/language/aphasia] = was_retarded[1]
+	if(LAZYACCESS(spoke_gibberish, 1))
+		affected_mob.language_holder.understood_languages[/datum/language/aphasia] = spoke_gibberish[1]
 	else
 		affected_mob.language_holder.understood_languages -= /datum/language/aphasia
-	if(LAZYACCESS(was_retarded, 2))
-		affected_mob.language_holder.spoken_languages[/datum/language/aphasia] = was_retarded[2]
+	if(LAZYACCESS(spoke_gibberish, 2))
+		affected_mob.language_holder.spoken_languages[/datum/language/aphasia] = spoke_gibberish[2]
 	else
 		affected_mob.language_holder.spoken_languages -= /datum/language/aphasia
 	affected_mob.language_holder.selected_language = LAZYACCESS(affected_mob.language_holder.spoken_languages, 1)

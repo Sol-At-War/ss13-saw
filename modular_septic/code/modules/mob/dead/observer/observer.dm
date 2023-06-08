@@ -19,7 +19,7 @@
 	NP.key = src.key
 	qdel(src)
 
-/mob/dead/observer/proc/combat_ressurection() //no observing for you nigga
+/mob/dead/observer/proc/combat_ressurection() //no observing for you
 	client.screen.Cut()
 	client.screen += client.void
 	var/mob/dead/new_player/M = new /mob/dead/new_player()

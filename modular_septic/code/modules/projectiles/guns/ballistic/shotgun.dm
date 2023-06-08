@@ -18,7 +18,7 @@
 	equip_sound = 'modular_septic/sound/weapons/guns/weap_away.ogg'
 	worn_icon_state = "shotgun"
 	fire_sound = 'modular_septic/sound/weapons/guns/shotgun/shotgun.wav'
-	suppressed_sound = 'modular_septic/sound/weapons/guns/shotgun/shotgun_silenced.wav'
+	suppressed_sound = list('modular_septic/sound/weapons/guns/shotgun/countryforold1.wav', 'modular_septic/sound/weapons/guns/shotgun/countryforold2.wav')
 	pickup_sound = 'modular_septic/sound/weapons/guns/shotgun/shotgun_draw.wav'
 	lock_back_sound = 'modular_septic/sound/weapons/guns/shotgun/shotgun_lock_back.wav'
 	bolt_drop_sound = 'modular_septic/sound/weapons/guns/shotgun/shotgun_lockin.wav'
@@ -59,6 +59,41 @@
 /obj/item/gun/ballistic/shotgun/doublebarrel
 	pb_knockback = 0
 	empty_icon_state = FALSE
+	bolt_type = BOLT_TYPE_BREAK_ACTION
+	can_suppress = FALSE
+	safety_flags = NONE
+	semi_auto = TRUE
+	cylinder_shows_open = TRUE
+	cylinder_shows_ammo_count = TRUE
+
+// The legendary
+/obj/item/gun/ballistic/shotgun/doublebarrel/bobox
+	name = "Bobox shotgun"
+	desc = "A legendary shotgun with a simple combination of two barrels, not ideal, but a powerful weapon in the filthiest, unskilled hands."
+	icon = 'modular_septic/icons/obj/items/guns/shotgun.dmi'
+	inhand_icon_state = "bobox"
+	base_icon_state = "bobox"
+	icon_state = "bobox"
+	worn_icon_state = "bobox"
+	wielded_inhand_state = FALSE
+	w_class = WEIGHT_CLASS_NORMAL
+	weapon_weight = WEAPON_LIGHT
+	cylinder_wording = "barrel"
+	rack_sound = list(
+		'modular_septic/sound/weapons/guns/revolver/hammer1.ogg', \
+		'modular_septic/sound/weapons/guns/revolver/hammer2.ogg', \
+	)
+	drop_sound = 'modular_septic/sound/weapons/guns/drop_lightgun.wav'
+	// close cylinder sound
+	lock_back_sound = 'modular_septic/sound/weapons/guns/shotgun/db_in.wav'
+	// open cylinder sound
+	bolt_drop_sound = 'modular_septic/sound/weapons/guns/shotgun/db_out.wav'
+	fire_sound = list('modular_septic/sound/weapons/guns/shotgun/comgun1.wav', 'modular_septic/sound/weapons/guns/shotgun/comgun2.wav')
+	load_sound = 'modular_septic/sound/weapons/guns/shotgun/db_load.wav'
+	mag_type = /obj/item/ammo_box/magazine/internal/cylinder/bobox
+	slot_flags = ITEM_SLOT_BELT
+	tetris_width = 64
+	tetris_height = 32
 
 // ITHACA SHOTGUN
 /obj/item/gun/ballistic/shotgun/ithaca
@@ -66,19 +101,7 @@
 	icon = 'modular_septic/icons/obj/items/guns/40x32.dmi'
 	icon_state = "ithaca"
 	base_icon_state = "ithaca"
-	suppressed_sound = list('modular_septic/sound/weapons/guns/shotgun/countryforold1.wav', 'modular_septic/sound/weapons/guns/shotgun/countryforold2.wav')
 	empty_indicator = FALSE
-
-// really nice state name
-/obj/item/gun/ballistic/shotgun/ithaca/lethal
-	name = "\improper ITOBE modelo 38 shotgun"
-	icon_state = "ithaca_nigger"
-	base_icon_state = "ithaca_nigger"
-	inhand_icon_state = "ithaca_nigger"
-	worn_icon_state = "shotgun_nigger"
-	pickup_sound = 'modular_septic/sound/weapons/guns/shotgun/nigga_shotgun_draw.wav'
-	mag_type = /obj/item/ammo_box/magazine/internal/shot/lethal
-
 
 // ??? SHOTGUN
 /obj/item/gun/ballistic/shotgun/riot
@@ -119,10 +142,7 @@
 	flight_x_offset = 24
 	flight_y_offset = 10
 	rack_sound = 'modular_septic/sound/weapons/guns/shotgun/semigun_cycle.wav'
-	fire_sound = list(
-		'modular_septic/sound/weapons/guns/shotgun/comgun1.wav', \
-		'modular_septic/sound/weapons/guns/shotgun/comgun2.wav', \
-	)
+	fire_sound = 'modular_septic/sound/weapons/guns/shotgun/semigun.wav'
 	suppressed_sound = 'modular_septic/sound/weapons/guns/shotgun/semigun_silenced.wav'
 	empty_indicator = FALSE
 	gunshot_animation_information = list(
@@ -298,9 +318,59 @@
 		'modular_septic/sound/weapons/guns/shotgun/bolas_load2.wav', \
 		'modular_septic/sound/weapons/guns/shotgun/bolas_load3.wav', \
 	)
+	client_recoil_animation_information = list(
+		"strength" = 1.5,
+		"duration" = 3.5,
+	)
 	lock_back_sound = 'modular_septic/sound/weapons/guns/shotgun/bolas_lock_back.wav'
 	bolt_drop_sound = 'modular_septic/sound/weapons/guns/shotgun/bolas_lockin.wav'
 	rack_sound = 'modular_septic/sound/weapons/guns/shotgun/bolas_pump.wav'
 	slot_flags = null
 	can_suppress = TRUE
 	suppressor_x_offset = 11
+
+// SPAS 12
+/obj/item/gun/ballistic/shotgun/denominator
+	name = "\improper SPICE-12 12-gauge shotgun"
+	desc = "An iconic 12-gauge shotgun with a chunky, chewy design with selectable fire-mode simply by pressing the switch \
+	(MMB) while the pump is forward and the safety is off."
+	icon = 'modular_septic/icons/obj/items/guns/48x32.dmi'
+	icon_state = "spas"
+	base_icon_state = "spas"
+	inhand_icon_state = "spas"
+	worn_icon_state = "spas"
+	lock_back_sound = 'modular_septic/sound/weapons/guns/shotgun/spas_lock_back.ogg'
+	bolt_drop_sound = 'modular_septic/sound/weapons/guns/shotgun/spas_lockin.ogg'
+	rack_sound = 'modular_septic/sound/weapons/guns/shotgun/spas_cycle.ogg'
+	fire_sound = list('modular_septic/sound/weapons/guns/shotgun/spas1.ogg', 'modular_septic/sound/weapons/guns/shotgun/spas2.ogg')
+	fold_open_sound = 'modular_septic/sound/weapons/guns/rifle/ak_stock_open.wav'
+	fold_close_sound = 'modular_septic/sound/weapons/guns/rifle/ak_stock_close.wav'
+	var/semi = FALSE
+	var/spas_semi_click = 'modular_septic/sound/weapons/guns/shotgun/spas_click.ogg'
+	foldable = TRUE
+	mag_type = /obj/item/ammo_box/magazine/internal/shot/spas
+
+/obj/item/gun/ballistic/shotgun/denominator/attack_self_tertiary(mob/user, modifiers)
+	. = ..()
+	if(bolt_locked || (!safety_flags & GUN_SAFETY_ENABLED))
+		var/wontbudge = "The switch won't budge."
+		if(!safety_flags & GUN_SAFETY_ENABLED)
+			wontbudge += span_warning(" The safety has to be off.")
+		if(bolt_locked)
+			wontbudge += span_danger(" The pump has to be forward.")
+		to_chat(user, span_notice("[wontbudge]"))
+		return
+	semi = !semi
+	user.visible_message(span_warning("[user] toggles the semi-automatic function to [semi ? "on" : "off"]."), \
+	span_notice("I toggle the semi-automatic function to [semi ? "on" : "off"]."))
+	if(semi)
+		playsound(src, safety_off_sound, safety_sound_volume, safety_sound_vary)
+	else
+		playsound(src, safety_on_sound, safety_sound_volume, safety_sound_vary)
+	sound_hint()
+
+/obj/item/gun/ballistic/shotgun/denominator/shoot_live_shot(mob/living/user)
+	. = ..()
+	if(semi)
+		playsound(src, spas_semi_click, 80, FALSE)
+		rack()

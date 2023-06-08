@@ -1,12 +1,28 @@
-/obj/item/reagent_containers/hypospray/medipen/blacktar
-	name = "Captagon medipen"
-	desc = "Black Tar Heroin, make sure not to inject twice until your current painkiller runs out."
-	icon_state = "syndipen"
-	inhand_icon_state = "tbpen"
-	base_icon_state = "syndipen"
-	volume = 100
-	amount_per_transfer_from_this = 50
-	list_reagents = list(/datum/reagent/medicine/copium = 20, /datum/reagent/medicine/c2/tirimol = 40, /datum/reagent/medicine/c2/helbital = 40)
+/obj/item/reagent_containers/hypospray/medipen
+	var/stimulator_sound = 'modular_septic/sound/effects/stimulator.wav'
+
+/obj/item/reagent_containers/hypospray/medipen/retractible
+	var/needle_out_sound = 'modular_septic/sound/efn/captagon/heroin_out.ogg'
+	var/needle_in_sound = 'modular_septic/sound/efn/captagon/heroin_in.ogg'
+	var/retracted = TRUE
+
+/obj/item/reagent_containers/hypospray/medipen/retractible/attack_self(mob/user)
+	toggle_needle(user)
+
+/obj/item/reagent_containers/hypospray/medipen/retractible/attack(mob/living/affected_mob, mob/user)
+	if(retracted)
+		to_chat(user, span_warning("The needle on the [src] Isn't out."))
+		return
+	. = ..()
+
+/obj/item/reagent_containers/hypospray/medipen/retractible/proc/toggle_needle(mob/user)
+	if(retracted)
+		playsound(src, needle_out_sound, 65, FALSE)
+	else
+		playsound(src, needle_in_sound, 65, FALSE)
+	var/random_adverb = pick("jaggedly", "haphazardly", "weirdly", "oddly", "funnily", "cutely")
+	to_chat(user, span_notice("The needle [retracted ? "sticks out [random_adverb]" : "retracts"]"))
+	retracted = !retracted
 
 /obj/item/reagent_containers/hypospray/medipen/antibiotic
 	name = "Antibiotic medipen"
@@ -22,7 +38,7 @@
 /obj/item/reagent_containers/hypospray/medipen/inject(mob/living/affected_mob, mob/user)
 	. = ..()
 	if(.)
-		reagents.maximum_volume = 0 //Makes them useless afterwards
+		//reagents.maximum_volume = 0 //Does not make them useless afterwards, fuck you
 		reagents.flags = NONE
-		playsound(src, 'modular_septic/sound/effects/stimulator.wav', volume, TRUE)
+		playsound(src, stimulator_sound, 65, TRUE)
 		update_appearance()

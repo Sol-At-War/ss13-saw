@@ -12,7 +12,6 @@
 		TRAIT_CAN_STRIP,
 		TRAIT_FLUORIDE_STARE,
 	)
-	attribute_sheet = /datum/attribute_holder/sheet/job/inborn
 	inherent_biotypes = MOB_ORGANIC | MOB_BEAST
 	mutant_bodyparts = list()
 	heatmod = 4
@@ -20,7 +19,7 @@
 	liked_food = RAW | MEAT | SEWAGE
 	disliked_food = VEGETABLES
 	changesource_flags = MIRROR_BADMIN | WABBAJACK | MIRROR_MAGIC | MIRROR_PRIDE | ERT_SPAWN | RACE_SWAP | SLIME_EXTRACT
-	say_mod = "berates"
+	say_mod = "screeches"
 	attack_verb = "slashes"
 	bite_sharpness = SHARP_POINTY
 	limbs_icon = 'modular_septic/icons/mob/human/species/human/creepypasta_parts.dmi'

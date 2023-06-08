@@ -126,6 +126,11 @@
 	/// How much damage an attack needs to do, at the very least, to damage internal organs
 	var/organ_damage_hit_minimum
 
+	/// Pain threshold at which a limb gets temporarily crippled
+	var/crippling_threshold
+	/// Timer for resetting crippling
+	var/cripple_timer
+
 	/// Used to handle rejection from incompatible owner - Rejection level
 	var/rejection_stage = 0
 	/// Is the limb even functional at all?
@@ -186,12 +191,13 @@
 
 	/// Specific dismemberment sounds, if any
 	var/list/dismemberment_sounds = list(
-		'modular_septic/sound/gore/gib1.wav',
-		'modular_septic/sound/gore/gib2.wav',
-		'modular_septic/sound/gore/gib3.wav',
-		'modular_septic/sound/gore/gib4.wav',
-		'modular_septic/sound/gore/gib5.wav',
+		'modular_septic/sound/gore/gib1.ogg',
+		'modular_septic/sound/gore/gib2.ogg',
+		'modular_septic/sound/gore/gib3.ogg',
+		'modular_septic/sound/gore/gib4.ogg',
+		'modular_septic/sound/gore/gib5.ogg',
 	)
+	var/dismemberment_volume = 80
 
 	/// Paths of that are already inside this limb on spawn - could be organs or limbs
 	var/list/starting_children
@@ -276,6 +282,8 @@
 	create_starting_children()
 	if(isnull(pain_disability_threshold))
 		pain_disability_threshold = (max_damage * 0.8)
+	if(isnull(crippling_threshold))
+		crippling_threshold = max_damage * 0.5
 	if(isnull(max_pain_damage))
 		max_pain_damage = max_damage * 1.5
 	if(isnull(organ_damage_requirement))
@@ -673,8 +681,10 @@
 	return LAZYACCESS(owner.organs_by_zone, body_zone)
 
 /// Empties the bodypart from its organs and other things inside it
-/obj/item/bodypart/proc/drop_organs(mob/user, violent_removal)
+/obj/item/bodypart/proc/drop_organs(violent_removal = FALSE)
 	var/turf/drop_location = drop_location()
+	if(!istype(drop_location))
+		drop_location = null
 	if(current_gauze)
 		remove_gauze(drop_gauze = FALSE)
 	if(brain)
@@ -694,26 +704,39 @@
 		if(istype(item, /obj/item/reagent_containers/pill))
 			for(var/datum/action/item_action/hands_free/activate_pill/pill_action in item.actions)
 				qdel(pill_action)
-		else if(istype(item, /obj/item/bodypart))
+		else if(isbodypart(item))
 			var/obj/item/bodypart/child_part = item
 			child_part.update_limb(TRUE)
 			child_part.update_icon_dropped()
-		if(istype(drop_location))
+		else if(isorgan(item))
+			var/obj/item/organ/organ = item
+			organ.organ_flags |= ORGAN_CUT_AWAY
+		if(drop_location)
 			item.forceMove(drop_location)
 		else
 			qdel(item)
 	cavity_items = null
 	embedded_objects = null
-	if(status == BODYPART_ORGANIC)
+	if(violent_removal && (status == BODYPART_ORGANIC))
 		playsound(src, 'sound/misc/splort.ogg', 50, TRUE, -1)
+	update_limb(TRUE)
 	update_icon_dropped()
 
 /// Empties the bodypart of bodyparts inside it
-/obj/item/bodypart/proc/drop_bodyparts()
+/obj/item/bodypart/proc/drop_bodyparts(mob/living/carbon/was_owner)
 	var/turf/drop_location = drop_location()
+	if(!istype(drop_location))
+		drop_location = null
 	for(var/obj/item/bodypart/bodypart in src)
-		if(istype(drop_location))
+		if(drop_location)
 			bodypart.forceMove(drop_location)
+			if(istype(was_owner))
+				var/direction = pick(GLOB.alldirs)
+				var/range = rand(1, 3)
+				var/turf/target_turf = get_ranged_target_turf(was_owner, direction, range)
+				var/old_throwforce = bodypart.throwforce
+				bodypart.throwforce = 0
+				bodypart.throw_at(target_turf, throw_range, throw_speed, callback = CALLBACK(src, /obj/item/bodypart/proc/dismember_done, old_throwforce))
 		else
 			qdel(bodypart)
 
@@ -989,34 +1012,17 @@
 	var/initial_wounding_dmg = wounding_dmg
 
 	// Now we have our wounding_type and are ready to carry on with dealing damage and then wounds
+	var/owner_endurance = GET_MOB_ATTRIBUTE_VALUE(owner, STAT_ENDURANCE)
 
-	// We add the pain values before we scale damage down
+	// We get the pain values before we scale damage down
 	// Pain does not care about your feelings, nor if your limb was already damaged
 	// to it's maximum
 	var/painkiller_mod = owner?.get_chem_effect(CE_PAINKILLER)/PAINKILLER_DIVISOR
 	var/pain = min((SHOCK_MOD_BRUTE * brute) + (SHOCK_MOD_BURN * burn) - painkiller_mod, max_pain_damage-pain_dam)
-	if(owner && pain && add_pain(pain, FALSE))
-		if(prob(pain*0.5))
-			owner.agony_scream()
-		owner.flash_pain(pain)
-		var/endurance = GET_MOB_ATTRIBUTE_VALUE(owner, STAT_ENDURANCE)
-		var/shock_penalty = min(MAX_SHOCK_PENALTY, FLOOR(pain/endurance, 1))
-		if(shock_penalty)
-			owner.update_shock_penalty(shock_penalty)
-			//If the hit was enough to cause a shock penalty, then check for crippling shock effect
-			if(limb_flags & BODYPART_EASY_MAJOR_WOUND)
-				//Certain limbs always get this when suffering shock penalties
-				owner.crippling_shock(pain, body_zone, wound_messages)
-			else
-				//Most limbs require a major wound, however
-				var/major_wound_threshold = CEILING((endurance/ATTRIBUTE_MIDDLING) * (0.5 * max_damage), 1)
-				if(pain >= major_wound_threshold)
-					owner.crippling_shock(pain, body_zone, wound_messages)
 
 	// Sparking on robotic limbs
-	if((status == BODYPART_ROBOTIC) && owner)
-		if((initial_wounding_dmg >= 5) && prob(20+brute+burn))
-			do_sparks(3,GLOB.alldirs,owner)
+	if((status == BODYPART_ROBOTIC) && owner && (initial_wounding_dmg >= 5) && prob(20+brute+burn))
+		do_sparks(3,GLOB.alldirs,owner)
 
 	// Total damage used to calculate the can_inflicts
 	var/total_damage = brute + burn
@@ -1030,19 +1036,30 @@
 	// We save these values to add to shock if necessary
 	var/extrabrute = max(0, brute - can_inflict_brute)
 	var/extraburn = max(0, burn - can_inflict_burn)
-	if(total_damage > 0 && total_damage > can_inflict) // TODO: the second part of this check should be removed once disabling is all done
+	if(total_damage > can_inflict)
 		brute = can_inflict_brute
 		burn = can_inflict_burn
-	if(stamina > 0 && stamina > can_inflict_stamina)
+	if(stamina > can_inflict_stamina)
 		stamina = can_inflict_stamina
 	if(extrabrute || extraburn)
 		if(pain_dam < max_pain_damage)
-			var/add_pain = extrabrute + extraburn - painkiller_mod
-			add_pain(add_pain, FALSE)
+			pain = min(pain+extrabrute+extraburn, max_pain_damage-pain_dam)
 		else if(owner)
-			var/endurance = GET_MOB_ATTRIBUTE_VALUE(owner, STAT_ENDURANCE)
-			var/oof_ouch = max(0, (extrabrute + extraburn - painkiller_mod) * (endurance/ATTRIBUTE_MIDDLING))
+			var/oof_ouch = max(0, (extrabrute + extraburn - painkiller_mod) * (owner_endurance/ATTRIBUTE_MIDDLING))
 			owner.adjustShockStage(oof_ouch)
+
+	// Now we add pain proper
+	if(owner && pain && add_pain(pain, FALSE))
+		if(prob(pain*0.5))
+			owner.agony_scream()
+		owner.flash_pain(pain)
+		var/shock_penalty = min(SHOCK_PENALTY_CAP, FLOOR(pain/owner_endurance, 1))
+		if(shock_penalty)
+			owner.update_shock_penalty(shock_penalty)
+		var/final_crippling_threshold = CEILING((owner_endurance/ATTRIBUTE_MIDDLING) * crippling_threshold, 1)
+		if(pain >= final_crippling_threshold)
+			owner.major_wound_effects(pain, body_zone, wound_messages)
+			update_cripple()
 
 	// Damage our injuries before we create new ones
 	for(var/datum/injury/iter_injury as anything in injuries)
@@ -1081,27 +1098,28 @@
 		if(BIO_JUST_FLESH)
 			if(wounding_type == WOUND_BLUNT)
 				wounding_type = WOUND_SLASH
-				wounding_dmg *= (easy_dismember ? 1 : 0.6)
+				wounding_dmg *= (easy_dismember ? 1 : 0.75)
 			else if(wounding_type == WOUND_PIERCE)
 				wounding_dmg *= (easy_dismember ? 1.5 : 1.25) // it's easy to puncture into plain flesh
 		// if we're bone only, all cutting attacks go straight to the bone
 		if(BIO_JUST_BONE)
 			if(wounding_type == WOUND_SLASH)
 				wounding_type = WOUND_BLUNT
-				wounding_dmg *= (easy_dismember ? 1 : 0.6)
+				wounding_dmg *= (easy_dismember ? 1 : 0.75)
 			else if(wounding_type == WOUND_PIERCE)
 				wounding_type = WOUND_BLUNT
-				wounding_dmg *= (easy_dismember ? 1 : 0.75)
+				wounding_dmg *= (easy_dismember ? 1 : 0.85)
 		// note that there's no handling for BIO_JUST_FLESH since we don't have any that are that right now (slimepeople maybe someday)
 		// standard humanoids
 		if(BIO_FLESH_BONE)
 			// if we've already mangled the skin (critical slash or piercing wound), then the bone is exposed, and we can damage it with sharp weapons at a reduced rate
 			// So a big sharp weapon is still all you need to destroy a limb
-			if(mangled_state == BODYPART_MANGLED_FLESH && (wounding_type in list(WOUND_SLASH, WOUND_PIERCE)) && sharpness)
+			var/static/list/conversion_types = list(WOUND_SLASH, WOUND_PIERCE)
+			if((mangled_state == BODYPART_MANGLED_FLESH || mangled_state == BODYPART_MANGLED_BOTH) && (wounding_type in conversion_types) && sharpness)
 				if(wounding_type == WOUND_SLASH && !easy_dismember)
-					wounding_dmg *= 0.6 // edged weapons pass along 60% of their wounding damage to the bone since the power is spread out over a larger area
+					wounding_dmg *= 0.75 // edged weapons pass along 60% of their wounding damage to the bone since the power is spread out over a larger area
 				if(wounding_type == WOUND_PIERCE && !easy_dismember)
-					wounding_dmg *= 0.8 // piercing weapons pass along 80% of their wounding damage to the bone since it's more concentrated
+					wounding_dmg *= 0.85 // piercing weapons pass along 80% of their wounding damage to the bone since it's more concentrated
 				wounding_type = WOUND_BLUNT
 
 	// also, deal with damaging wounds before we create new ones
@@ -1112,16 +1130,19 @@
 	if(owner && (wound_bonus != CANT_WOUND))
 		if(wounding_dmg >= WOUND_MINIMUM_DAMAGE)
 			check_wounding(wounding_type, wounding_dmg, wound_bonus, bare_wound_bonus)
-			if(initial_wounding_dmg >= SPILL_MINIMUM_DAMAGE)
-				check_wounding(WOUND_SPILL, initial_wounding_dmg * (initial_wounding_type == WOUND_PIERCE ? 0.5 : 1), wound_bonus, bare_wound_bonus)
+		//may have been dismembered
+		if(!owner)
+			return
+		if(initial_wounding_dmg >= SPILL_MINIMUM_DAMAGE)
+			check_wounding(WOUND_SPILL, initial_wounding_dmg * (initial_wounding_type == WOUND_PIERCE ? 0.5 : 1), wound_bonus, bare_wound_bonus)
+		if((initial_wounding_type in list(WOUND_BLUNT, WOUND_PIERCE)) && (initial_wounding_dmg >= TEETH_MINIMUM_DAMAGE))
+			check_wounding(WOUND_TEETH, initial_wounding_dmg * (initial_wounding_type != WOUND_BLUNT ? 0.65 : 1), wound_bonus, bare_wound_bonus)
 		if((initial_wounding_type in list(WOUND_SLASH, WOUND_PIERCE)) && (initial_wounding_dmg >= ARTERY_MINIMUM_DAMAGE))
 			check_wounding(WOUND_ARTERY, initial_wounding_dmg * (initial_wounding_type == WOUND_PIERCE ? 0.75 : 1), wound_bonus, bare_wound_bonus)
 		if((initial_wounding_type in list(WOUND_BLUNT, WOUND_SLASH, WOUND_PIERCE)) && (initial_wounding_dmg >= TENDON_MINIMUM_DAMAGE))
 			check_wounding(WOUND_TENDON, initial_wounding_dmg * (initial_wounding_type == WOUND_BLUNT ? 0.5 : (initial_wounding_type == WOUND_PIERCE ? 0.75 : 1)), wound_bonus, bare_wound_bonus)
 		if((initial_wounding_type in list(WOUND_BLUNT, WOUND_SLASH, WOUND_PIERCE)) && (initial_wounding_dmg >= NERVE_MINIMUM_DAMAGE))
 			check_wounding(WOUND_NERVE, initial_wounding_dmg * (initial_wounding_type == WOUND_BLUNT ? 0.65 : (initial_wounding_type == WOUND_PIERCE ? 0.5 : 1)), wound_bonus, bare_wound_bonus)
-		if((initial_wounding_type in list(WOUND_BLUNT, WOUND_PIERCE)) && (initial_wounding_dmg >= TEETH_MINIMUM_DAMAGE))
-			check_wounding(WOUND_TEETH, initial_wounding_dmg * (initial_wounding_type != WOUND_BLUNT ? 0.65 : 1), wound_bonus, bare_wound_bonus)
 	/*
 	// END WOUND HANDLING
 	*/
@@ -1132,8 +1153,9 @@
 			damage_internal_organs(initial_wounding_type, initial_wounding_dmg, organ_bonus, bare_organ_bonus, wound_messages = wound_messages)
 		// Jostle broken bones too just for shits n giggles
 		for(var/obj/item/organ/bone/bone in shuffle(getorganslotlist(ORGAN_SLOT_BONE)))
-			if(bone.can_jostle(owner))
-				bone.jostle(owner)
+			if(!bone.can_jostle(owner))
+				continue
+			bone.jostle(owner)
 
 	// Try to damage gauze/splint, if possible
 	if(current_gauze)
@@ -1169,8 +1191,7 @@
 	number_injuries = 0
 	brute_dam = 0
 	burn_dam = 0
-	for(var/thing in injuries)
-		var/datum/injury/injury = thing
+	for(var/datum/injury/injury as anything in injuries)
 		if(injury.damage <= 0)
 			continue
 
@@ -1211,8 +1232,7 @@
 
 	if(ishuman(owner) && bare_organ_bonus)
 		var/mob/living/carbon/human/human_owner = owner
-		for(var/i in human_owner.clothingonpart(src))
-			var/obj/item/clothing/clothes_check = i
+		for(var/obj/item/clothing/clothes_check as anything in human_owner.clothingonpart(src))
 			if(clothes_check.armor.getRating(WOUND))
 				bare_organ_bonus = 0
 				break
@@ -1236,8 +1256,7 @@
 			organ_damage_hit_minimum *= 1
 
 	// Wounds can alter our odds of harming organs
-	for(var/ouch in wounds)
-		var/datum/wound/oof = ouch
+	for(var/datum/wound/oof as anything in wounds)
 		damage_amt += oof.organ_damage_increase
 		organ_damage_minimum = max(1, organ_damage_minimum - oof.organ_minimum_reduction)
 		organ_damaged_required = max(1, organ_damaged_required - oof.organ_required_reduction)
@@ -1258,11 +1277,10 @@
 	if(LAZYLEN(extra_parts))
 		var/obj/item/bodypart/shoeonhead = extra_parts[1]
 		bones |= shoeonhead.getorganslotlist(ORGAN_SLOT_BONE)
-	for(var/bone in bones)
-		var/obj/item/organ/bone/boner = bone
-		if((boner.damage >= boner.medium_threshold) || !(boner.bone_flags & BONE_ENCASING))
+	for(var/obj/item/organ/bone/bone as anything in bones)
+		if((bone.damage >= bone.medium_threshold) || !(bone.bone_flags & BONE_ENCASING))
 			continue
-		modifier *= min(1, 0.5 * (ORGAN_OPTIMAL_EFFICIENCY/boner.get_slot_efficiency(ORGAN_SLOT_BONE)) )
+		modifier *= (ORGAN_OPTIMAL_EFFICIENCY/max(50, bone.get_slot_efficiency(ORGAN_SLOT_BONE)))
 
 	organ_hit_chance *= modifier
 	organ_hit_chance = clamp(CEILING(organ_hit_chance, 1), 0, 100)
@@ -1273,10 +1291,11 @@
 	damage_amt = max(0, CEILING((damage_amt * victim.internal_damage_modifier) - victim.internal_damage_reduction, 1))
 	if(damage_amt >= 1)
 		victim.applyOrganDamage(damage_amt, silent = (damage_amt >= 15))
-	if(damage_amt >= 15)
-		owner.custom_pain("<b>MY [uppertext(victim.name)] HURTS!</b>", rand(25, 35), affecting = src, nopainloss = TRUE)
-	if(owner && wound_messages)
-		SEND_SIGNAL(owner, COMSIG_CARBON_ADD_TO_WOUND_MESSAGE, span_danger(" <b>An organ is damaged!</b>"))
+	if(owner)
+		if(damage_amt >= 15)
+			owner.custom_pain("<b>MY [uppertext(victim.name)] HURTS!</b>", rand(25, 35), affecting = src, nopainloss = TRUE)
+		if(wound_messages)
+			SEND_SIGNAL(owner, COMSIG_CARBON_ADD_TO_WOUND_MESSAGE, span_danger(" <b>An organ is damaged!</b>"))
 	return TRUE
 
 /// Creates an injury on the bodypart
@@ -1384,7 +1403,7 @@
 				damage_integrity(initial_wounding_type, phantom_wounding_dmg, wound_bonus, bare_wound_bonus)
 
 /obj/item/bodypart/proc/get_wound_weakness(wounding_type = WOUND_BLUNT)
-	. = wound_resistance
+	. = -wound_resistance
 	var/mangled_state = get_mangled_state()
 	var/static/list/mangled_flesh_states = list(BODYPART_MANGLED_FLESH, BODYPART_MANGLED_BOTH)
 	if((mangled_state in mangled_flesh_states) && \
@@ -1436,19 +1455,15 @@
 	wound_roll += check_woundings_mods(woundtype, damage, wound_bonus, bare_wound_bonus)
 	wound_roll = round_to_nearest(wound_roll, 1)
 
-	if(wound_roll >= WOUND_DISMEMBER_OUTRIGHT_THRESH)
-		apply_dismember(woundtype)
+	var/static/list/dismemberment_wound_types = list(
+		WOUND_BLUNT,
+		WOUND_SLASH,
+		WOUND_PIERCE,
+		WOUND_BURN,
+	)
+	if((wound_roll >= WOUND_DISMEMBER_OUTRIGHT_THRESH) && (woundtype in dismemberment_wound_types))
+		apply_dismember(woundtype, TRUE, TRUE)
 		return
-
-	// quick re-check to see if bare_wound_bonus applies, for the benefit of log_wound(), see about getting the check from check_woundings_mods() somehow
-	if(ishuman(owner) && bare_wound_bonus)
-		var/mob/living/carbon/human/human_wearer = owner
-		var/list/clothing = human_wearer.clothingonpart(src)
-		for(var/obj/item/clothing/clothes_check in clothing)
-			// unlike normal armor checks, we tabluate these piece-by-piece manually so we can also pass on appropriate damage the clothing's limbs if necessary
-			if(clothes_check.armor.getRating(WOUND) || clothes_check.subarmor.getRating(WOUND))
-				bare_wound_bonus = 0
-				break
 
 	//cycle through the wounds of the relevant category from the most severe down
 	var/datum/wound/new_wound
@@ -1474,8 +1489,7 @@
 // try forcing a specific wound, but only if there isn't already a wound of that severity or greater for that type on this bodypart
 /obj/item/bodypart/proc/force_wound_upwards(specific_woundtype, smited = FALSE)
 	var/datum/wound/potential_wound = specific_woundtype
-	for(var/i in wounds)
-		var/datum/wound/existing_wound = i
+	for(var/datum/wound/existing_wound as anything in wounds)
 		if(existing_wound.wound_type == initial(potential_wound.wound_type))
 			if(existing_wound.severity < initial(potential_wound.severity)) // we only try if the existing one is inferior to the one we're trying to force
 				existing_wound.replace_wound(potential_wound, smited)
@@ -1559,6 +1573,20 @@
 		consider_processing()
 	return update_bodypart_damage_state()
 
+/// Temporarily cripples the bodypart for a certain duration
+/obj/item/bodypart/proc/update_cripple(duration = 4 SECONDS)
+	if(!duration)
+		return
+	if(cripple_timer)
+		deltimer(cripple_timer)
+		cripple_timer = null
+	ADD_TRAIT(src, TRAIT_PARALYSIS, BODYPART_TRAIT)
+	cripple_timer = addtimer(CALLBACK(src, .proc/remove_cripple), duration, TIMER_STOPPABLE)
+
+/obj/item/bodypart/proc/remove_cripple()
+	REMOVE_TRAIT(src, TRAIT_PARALYSIS, BODYPART_TRAIT)
+	cripple_timer = null
+
 // UNSAFE PROC! DO NOT USE.
 ///Proc to hook behavior associated to the change of the brute_dam variable's value.
 /obj/item/bodypart/proc/set_brute_dam(new_value)
@@ -1595,9 +1623,6 @@
 /obj/item/bodypart/proc/update_limb_efficiency()
 	var/divisor = 0
 	limb_efficiency = 0
-	if(CHECK_BITFIELD(limb_flags, BODYPART_HAS_ARTERY))
-		divisor += 0.5
-		limb_efficiency += getorganslotefficiency(ORGAN_SLOT_ARTERY)/2
 	if(CHECK_BITFIELD(limb_flags, BODYPART_HAS_TENDON))
 		divisor += 1
 		limb_efficiency += getorganslotefficiency(ORGAN_SLOT_TENDON)
@@ -1620,25 +1645,22 @@
 		limb_efficiency -= ((LIMB_EFFICIENCY_OPTIMAL/2) * (1 - get_teeth_amount()/max_teeth))
 	// splint checks
 	var/splint_factor = 0
-	var/broken_factor = 0
 	if(current_splint)
 		splint_factor = (1 - current_splint.splint_factor)
+	var/broken_factor = 0
 	if(CHECK_BITFIELD(limb_flags, BODYPART_HAS_BONE))
-		for(var/thing in getorganslotlist(ORGAN_SLOT_BONE))
-			var/obj/item/organ/bone/bone = thing
+		for(var/obj/item/organ/bone/bone as anything in getorganslotlist(ORGAN_SLOT_BONE))
 			broken_factor = max(broken_factor, bone.damage/bone.maxHealth)
 	if(CHECK_BITFIELD(limb_flags, BODYPART_HAS_TENDON))
-		for(var/thing in getorganslotlist(ORGAN_SLOT_TENDON))
-			var/obj/item/organ/tendon/tendon = thing
+		for(var/obj/item/organ/tendon/tendon as anything in getorganslotlist(ORGAN_SLOT_TENDON))
 			broken_factor = max(broken_factor, tendon.damage/tendon.maxHealth)
 	if(CHECK_BITFIELD(limb_flags, BODYPART_HAS_NERVE))
-		for(var/thing in getorganslotlist(ORGAN_SLOT_NERVE))
-			var/obj/item/organ/nerve/nerve = thing
+		for(var/obj/item/organ/nerve/nerve as anything in getorganslotlist(ORGAN_SLOT_NERVE))
 			broken_factor = max(broken_factor, nerve.damage/nerve.maxHealth)
 	// passing any of these checks means we are absolutely worthless
 	if(!functional || is_cut_away() || bone_missing() || tendon_missing() || nerve_missing() || artery_missing())
 		limb_efficiency = 0
-	else if((broken_factor > 0.75) && (broken_factor - splint_factor > 0))
+	else if((broken_factor > 0.75) || (broken_factor - splint_factor > 0))
 		limb_efficiency = 0
 	limb_efficiency = max(0, CEILING(limb_efficiency, 1))
 	if(owner)
@@ -1847,12 +1869,12 @@
 
 /// Get whatever wound of the given type is currently attached to this limb, if any
 /obj/item/bodypart/proc/get_wound_type(checking_type)
-	if(isnull(wounds))
+	if(!wounds)
 		return
 
-	for(var/i in wounds)
-		if(istype(i, checking_type))
-			return i
+	for(var/wound in wounds)
+		if(istype(wound, checking_type))
+			return wound
 
 /**
  * update_wounds() is called whenever a wound is gained or lost on this bodypart, as well as if there's a change of some kind on a bone wound possibly changing disabled status
@@ -1866,8 +1888,7 @@
 	var/dam_mul = initial(damage_multiplier)
 
 	// we can (normally) only have one wound per type, but remember there's multiple types (smites like :B:loodless can generate multiple cuts on a limb)
-	for(var/i in wounds)
-		var/datum/wound/iter_wound = i
+	for(var/datum/wound/iter_wound as anything in wounds)
 		dam_mul *= iter_wound.damage_multiplier_penalty
 
 	damage_multiplier = dam_mul
@@ -1880,15 +1901,13 @@
 	if(generic_bleedstacks > 0)
 		bleed_rate += 1
 
-	for(var/thing in wounds)
-		var/datum/wound/W = thing
-		if(W.wound_type != WOUND_ARTERY)
-			bleed_rate += W.blood_flow
+	for(var/datum/wound/wound as anything in wounds)
+		if(wound.wound_type != WOUND_ARTERY)
+			bleed_rate += wound.blood_flow
 
-	for(var/thing in injuries)
-		var/datum/injury/IN = thing
-		if(IN.is_bleeding())
-			bleed_rate += IN.get_bleed_rate()
+	for(var/datum/injury/injury as anything in injuries)
+		if(injury.is_bleeding())
+			bleed_rate += injury.get_bleed_rate()
 
 	if(owner.body_position == LYING_DOWN)
 		bleed_rate *= 0.8

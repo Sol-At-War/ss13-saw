@@ -29,6 +29,16 @@
 				hud_used.pain_guy.icon_state = "[hud_used.pain_guy.base_icon_state]u"
 		else
 			hud_used.pain_guy.icon_state = "paind"
+	//Pain fucks up our vision
+	switch(traumatic_shock)
+		if(-INFINITY to SHOCK_STAGE_2)
+			hud_used.update_chromatic_aberration(intensity = 0)
+		if(SHOCK_STAGE_2 to SHOCK_STAGE_4)
+			hud_used.update_chromatic_aberration(intensity = 1, red_x = 1, red_y = 1, blue_x = -1, blue_y = -1)
+		if(SHOCK_STAGE_4 to SHOCK_STAGE_6)
+			hud_used.update_chromatic_aberration(intensity = 2, red_x = 2, red_y = 2, blue_x = -2, blue_y = -2)
+		if(SHOCK_STAGE_6 to INFINITY)
+			hud_used.update_chromatic_aberration(intensity = 3, red_x = 3, red_y = 3, blue_x = -3, blue_y = -3)
 
 /mob/living/carbon/handle_shock(delta_time, times_fired)
 	. = ..()
@@ -67,9 +77,7 @@
 
 	var/maxbpshock = 0
 	var/obj/item/bodypart/damaged_bodypart
-	var/obj/item/bodypart/bodypart
-	for(var/thing as anything in bodyparts)
-		bodypart = thing
+	for(var/obj/item/bodypart/bodypart as anything in bodyparts)
 		var/bpshock = bodypart.get_shock(FALSE, TRUE)
 		// make the choice of the organ depend on damage,
 		// but also sometimes use one of the less damaged ones
@@ -78,19 +86,20 @@
 			maxbpshock = bpshock
 
 	if(damaged_bodypart && (get_chem_effect(CE_PAINKILLER) < maxbpshock))
-		if((damaged_bodypart.held_index) && (maxbpshock >= 15) && prob(maxbpshock))
-			var/obj/item/droppy = get_item_for_held_index(damaged_bodypart.held_index)
-			if(droppy)
-				dropItemToGround(droppy)
-		else
+		if(damaged_bodypart.held_index)
 			if((maxbpshock >= 15) && prob(maxbpshock))
-				for(var/child_zone in damaged_bodypart.children_zones)
-					var/obj/item/bodypart/child = get_bodypart(child_zone)
-					if(!child?.held_index)
-						continue
-					var/obj/item/droppy = get_item_for_held_index(child.held_index)
-					if(droppy)
-						dropItemToGround(droppy)
+				var/obj/item/droppy = get_item_for_held_index(damaged_bodypart.held_index)
+				if(droppy)
+					dropItemToGround(droppy)
+		else if((maxbpshock >= 15) && prob(maxbpshock))
+			var/obj/item/bodypart/child
+			for(var/child_zone in damaged_bodypart.children_zones)
+				child = get_bodypart(child_zone)
+				if(!child?.held_index)
+					continue
+				var/obj/item/droppy = get_item_for_held_index(child.held_index)
+				if(droppy)
+					dropItemToGround(droppy)
 		var/burning = (damaged_bodypart.burn_dam >= damaged_bodypart.brute_dam)
 		var/message
 		switch(CEILING(maxbpshock, 1))
@@ -121,7 +130,7 @@
 				custom_pain(message, pain, FALSE, parent)
 
 	if(traumatic_shock >= PAIN_SHOCK_PENALTY)
-		var/penalty = min(MAX_SHOCK_PENALTY, FLOOR(traumatic_shock/(our_endurance*2), 1))
+		var/penalty = min(SHOCK_PENALTY_CAP, FLOOR(traumatic_shock/(our_endurance*2), 1))
 		if(penalty)
 			var/probability = CEILING(min(60, traumatic_shock/(2 * (our_endurance/ATTRIBUTE_MIDDLING))), 1)
 			if(DT_PROB(probability/2, delta_time))
@@ -156,10 +165,11 @@
 		setShockStage(0)
 		remove_movespeed_modifier(/datum/movespeed_modifier/shock_stage, FALSE)
 		remove_movespeed_modifier(/datum/movespeed_modifier/cardiac_arrest, TRUE)
+		hud_used?.update_chromatic_aberration(intensity = 0)
 		return
 
 	var/previous_shock_stage = shock_stage
-	var/our_endurance = GET_MOB_ATTRIBUTE_VALUE(src, STAT_ENDURANCE)
+	var/our_endurance = max(1, GET_MOB_ATTRIBUTE_VALUE(src, STAT_ENDURANCE))
 
 	//Cardiac arrest automatically throws us into sofcrit territory
 	if(undergoing_cardiac_arrest())
@@ -190,9 +200,10 @@
 		return
 
 	if((shock_stage >= SHOCK_STAGE_1) && (previous_shock_stage < SHOCK_STAGE_1))
-		// Please be very careful when calling custom_pain() from within code that relies on pain/trauma values. There's the
-		// possibility of a feedback loop from custom_pain() being called with a positive power, incrementing pain on a limb,
-		// which triggers this proc, which calls custom_pain(), etc. Make sure you call it with nopainloss = TRUE in these cases!
+		/** Please be very careful when calling custom_pain() from within code that relies on pain/trauma values. There's the
+		 * possibility of a feedback loop from custom_pain() being called with a positive power, incrementing pain on a limb,
+		 * which triggers this proc, which calls custom_pain(), etc. Make sure you call it with nopainloss = TRUE in these cases!
+		 */
 		custom_pain("[pick("It hurts so much", "I really need some painkillers", "Ooh, the pain")]!", 10, nopainloss = TRUE)
 
 	if((shock_stage >= SHOCK_STAGE_2) && (previous_shock_stage < SHOCK_STAGE_2))
@@ -315,7 +326,7 @@
 	next_pain_message_time = world.time + (200 + power)
 	return TRUE
 
-/mob/living/carbon/check_self_for_injuries()
+/mob/living/carbon/check_self_for_injuries(detailed = FALSE)
 	if(stat < UNCONSCIOUS)
 		visible_message(span_notice("<b>[src]</b> examines [p_themselves()]."), \
 						span_notice("<b>I check myself.</b>"))
@@ -435,8 +446,8 @@
 	to_chat(src, jointext(return_text, ""))
 	return TRUE
 
-/mob/living/carbon/proc/print_pain()
-	return check_self_for_injuries()
+/mob/living/carbon/proc/print_pain(detailed = FALSE)
+	return check_self_for_injuries(detailed)
 
 /mob/living/carbon/proc/InShock()
 	return (shock_stage >= SHOCK_STAGE_4)
@@ -464,15 +475,61 @@
 			parts += BP
 	return parts
 
-/mob/living/carbon/proc/endorphinate(silent = FALSE, no_endorphin_flash = FALSE, forced = FALSE)
+/mob/living/carbon/proc/endorphinate(forced = FALSE, silent = FALSE, local_sound = TRUE, flash = TRUE, special_sound)
 	var/endurance = GET_MOB_ATTRIBUTE_VALUE(src, STAT_ENDURANCE)
-	if(!forced && (TIMER_COOLDOWN_CHECK(src, COOLDOWN_CARBON_ENDORPHINATION) || (diceroll(endurance) <= DICE_FAILURE)))
+	if(!forced && (TIMER_COOLDOWN_CHECK(src, COOLDOWN_CARBON_ENDORPHINATION) || (diceroll(endurance, context = DICE_CONTEXT_MENTAL) <= DICE_FAILURE)))
 		return
 
-	var/endorphin_amount = clamp(endurance, 5, 28)
+	var/endorphin_amount = clamp(endurance, 5, 29)
 	reagents?.add_reagent(/datum/reagent/medicine/endorphin, endorphin_amount)
 	TIMER_COOLDOWN_START(src, COOLDOWN_CARBON_ENDORPHINATION, ENDORPHINATION_COOLDOWN_DURATION)
 	if(!silent)
-		playsound_local(src, 'modular_septic/sound/heart/combatcocktail.wav', 80, FALSE)
-	if(!no_endorphin_flash)
-		flash_pain_endorphine()
+		var/final_sound = special_sound || 'modular_septic/sound/heart/combatcocktail.ogg'
+		if(local_sound)
+			playsound_local(src, final_sound, 80, FALSE)
+		else
+			playsound(src, final_sound, 80, FALSE)
+	if(!flash)
+		return
+	flash_pain_endorphine()
+
+//Hacker shit
+/mob/living/carbon/proc/neural_entanglement()
+	var/obj/item/bodypart/head/head = get_bodypart(BODY_ZONE_HEAD)
+	var/exploodie_sounds = list(
+		'modular_septic/sound/gore/hacker_head1.ogg',
+		'modular_septic/sound/gore/hacker_head2.ogg',
+	)
+	playsound(src, exploodie_sounds, 100, FALSE, 2)
+	head.dismember(destroy = TRUE, wounding_type = WOUND_PIERCE)
+
+#define cap_for sleep
+
+//////////////////////////////////////////////////////////////////////
+// https://www.youtube.com/watch?v=Hoz9l4l8LYw&ab_channel=FamilyGuy //
+//////////////////////////////////////////////////////////////////////
+
+/mob/living/carbon/proc/sexual_vomit(amount_of_sex = 6, rapid = FALSE)
+	var/YES_PLEASE = 0.2 SECONDS
+	var/sex_time = YES_PLEASE // yes please
+	if(rapid)
+		sex_time = 0.1 //rapid
+		YES_PLEASE = 0.1
+	var/static/list/fuck = list("OAHUHUHHHHH?", "OHHHUHHHHHHHHH!!!", "AHHHHHH OHHH AHH!!", "FUUCK...AHUHHH!!", "OHHHHHHHH!", "AH~", "AAAAAAAAAAAAAAAAAAAAAAAHHHHHH!!!", "NOOOO!!!!!", "OH MY GOODNESS GRACIOUS")
+	vomit(stun = TRUE, vomit_type = VOMIT_PURPLE, purge_ratio = 1, force = TRUE)
+	to_chat(src, span_boldwarning("ooOUHUHHH FUUUCCKK!"))
+	flash_pain(100)
+	for(var/projectile_vomit = 0 to amount_of_sex)
+		cap_for(sex_time) //cap
+		if(prob(35))
+			emote(act = "cry", intentional = FALSE) //cry
+		else
+			emote(act = "deathscream", intentional = FALSE) //scream
+		vomit(stun = TRUE, vomit_type = VOMIT_PURPLE, purge_ratio = 1, force = TRUE) //vomit
+		flash_pain(85)
+		to_chat(src, span_boldwarning("[pick(fuck)]"))
+		sex_time += YES_PLEASE // at the same time too
+		if(sex_time > 10.2)
+			sex_time = YES_PLEASE
+
+#undef cap_for

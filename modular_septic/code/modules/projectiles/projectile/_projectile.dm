@@ -87,14 +87,11 @@
 				mode = PROJECTILE_PIERCE_NONE
 			else if(embed_attempt & COMPONENT_EMBED_WENT_THROUGH)
 				SEND_SIGNAL(target, COMSIG_CARBON_ADD_TO_WOUND_MESSAGE, span_danger(" <i>\The [name] go[p_es()] through!</i>"))
-	var/wound_message = ""
-	if(iscarbon(target))
-		var/mob/living/carbon/carbon_target = target
-		wound_message = carbon_target.wound_message
 	SEND_SIGNAL(target, COMSIG_CARBON_CLEAR_WOUND_MESSAGE)
+	// EXPERIMENTAL: Removed wound messages for projectiles
 	if(hit_text)
-		target.visible_message("[hit_text][wound_message]", \
-			self_message = "[target_hit_text][wound_message]", \
+		target.visible_message("[hit_text]", \
+			self_message = "[target_hit_text]", \
 			blind_message = span_hear("I hear something piercing flesh!"), \
 			vision_distance = COMBAT_MESSAGE_RANGE)
 	if((result == BULLET_ACT_FORCE_PIERCE) || (mode == PROJECTILE_PIERCE_HIT))
@@ -132,7 +129,7 @@
 		hity = target.pixel_y + rand(-8, 8)
 
 	var/final_hitsound
-	var/hitsound_volume = vol_by_damage()
+	var/final_hitsound_volume = vol_by_damage()
 	if(!nodamage && (damage_type == BRUTE || damage_type == BURN))
 		if(iswallturf(target_location) && ((target == target_location) || prob(50)) )
 			var/turf/closed/wall/wall = target_location
@@ -144,7 +141,7 @@
 			wall.sound_hint()
 			final_hitsound = wall.get_projectile_hitsound(src)
 			if(final_hitsound)
-				playsound(wall, final_hitsound, hitsound_volume, TRUE, -1)
+				playsound(wall, final_hitsound, final_hitsound_volume, TRUE, -1)
 
 			return BULLET_ACT_HIT
 		else if(isfloorturf(target_location) && (target == target_location))
@@ -157,7 +154,7 @@
 			floor.sound_hint()
 			final_hitsound = floor.get_projectile_hitsound(src)
 			if(final_hitsound)
-				playsound(floor, final_hitsound, hitsound_volume, TRUE, -1)
+				playsound(floor, final_hitsound, final_hitsound_volume, TRUE, -1)
 
 			return BULLET_ACT_HIT
 
@@ -170,7 +167,7 @@
 			new impact_effect_type(target_location, hitx, hity)
 		target.sound_hint()
 		if(final_hitsound)
-			playsound(target, final_hitsound, hitsound_volume, TRUE, -1)
+			playsound(target, final_hitsound, final_hitsound_volume, TRUE, -1)
 		return BULLET_ACT_HIT
 
 	var/mob/living/living_target = target
@@ -201,7 +198,7 @@
 		else
 			sound_hint()
 			if(final_hitsound)
-				playsound(target, final_hitsound, hitsound_volume, TRUE, -1)
+				playsound(target, final_hitsound, final_hitsound_volume, TRUE, -1)
 			hit_text = span_danger("<b>[living_target]</b> is hit by \the [src][organ_hit_text]!")
 			target_hit_text = span_userdanger("I'm hit by \the [src][organ_hit_text]!")
 		living_target.on_hit(src)

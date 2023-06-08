@@ -10,6 +10,14 @@
 	world_icon_state = "762b-casing"
 	projectile_type = /obj/projectile/bullet/a762/ap
 
+/obj/item/ammo_casing/a556
+	name = "5.56mm bullet casing"
+	desc = "A 5.56mm bullet casing."
+	base_icon_state = "c545"
+	world_icon_state = "545-casing"
+	caliber = CALIBER_A556
+	projectile_type = /obj/projectile/bullet/a556
+
 /obj/item/ammo_casing/a545
 	name = "5.45x39 bullet casing"
 	desc = "A 5.45x39 bullet casing."

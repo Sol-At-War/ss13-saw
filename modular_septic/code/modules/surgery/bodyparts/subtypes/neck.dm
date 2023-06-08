@@ -10,7 +10,7 @@
 	children_zones = list(BODY_ZONE_HEAD)
 	body_zone = BODY_ZONE_PRECISE_NECK
 	body_part = NECK
-	limb_flags = BODYPART_EDIBLE|BODYPART_EASY_MAJOR_WOUND|BODYPART_HAS_BONE|BODYPART_HAS_TENDON|BODYPART_HAS_NERVE|BODYPART_HAS_ARTERY
+	limb_flags = BODYPART_EDIBLE|BODYPART_HAS_BONE|BODYPART_HAS_TENDON|BODYPART_HAS_NERVE|BODYPART_HAS_ARTERY
 	max_damage = 30
 	max_stamina_damage = 30
 	wound_resistance = -5
@@ -28,11 +28,10 @@
 	px_x = 0
 	px_y = -8
 	dismemberment_sounds = list(
-		'modular_septic/sound/gore/head_explodie1.ogg',
-		'modular_septic/sound/gore/head_explodie2.ogg',
-		'modular_septic/sound/gore/head_explodie3.ogg',
-		'modular_septic/sound/gore/head_explodie4.ogg',
+		'modular_septic/sound/gore/neck_explodie1.wav',
+		'modular_septic/sound/gore/neck_explodie2.wav',
 	)
+	dismemberment_volume = 125
 
 	cavity_name = "esophagus"
 	amputation_point_name = "trachea"

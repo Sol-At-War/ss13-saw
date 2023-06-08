@@ -25,6 +25,7 @@
 		"tail" = "Hawk",
 		"wings" = "Feathery (alt 1)"
 	)
+	//barbed, knotted pp
 	// Parotin are feathered and can stand lower temperatures than humans
 	heatmod = 2
 	coldmod = 0.5

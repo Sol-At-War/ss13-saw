@@ -11,8 +11,6 @@
 	switch(character_preview_type)
 		if(PREVIEW_PREF_NAKED)
 			mannequin.underwear_visibility = UNDERWEAR_HIDE_UNDIES | UNDERWEAR_HIDE_SHIRT | UNDERWEAR_HIDE_SOCKS
-		if(PREVIEW_PREF_NAKED_AROUSED)
-			mannequin.underwear_visibility = UNDERWEAR_HIDE_UNDIES | UNDERWEAR_HIDE_SHIRT | UNDERWEAR_HIDE_SOCKS
 		else
 			if(preview_job)
 				mannequin.job = preview_job.title

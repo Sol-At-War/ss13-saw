@@ -1,6 +1,14 @@
 /datum/job
 	/// Stat sheet this job uses, if any (ADDITIVE)
 	var/attribute_sheet
+	/// Whether or not this job has a circumcised penis
+	var/penis_circumcised = FALSE
+	/// Minimum breast size for this role (gets converted to cup size)
+	var/min_breastsize = 1
+	/// Maximum breast size for this role (gets converted to cup size)
+	var/max_breastsize = 3
+	/// Whether or not this job has lactating breasts
+	var/breasts_lactating = FALSE
 	/// With this set to TRUE, the loadout will be applied before a job clothing will be
 	var/no_dresscode = FALSE
 	/// Whether the job can use the loadout system
@@ -9,12 +17,12 @@
 	var/list/banned_quirks
 	/// A list of slots that can't have loadout items assigned to them if no_dresscode is applied, used for important items such as ID, PDA, backpack and headset
 	var/list/blacklist_dresscode_slots
-	/// Whitelist of allowed species for this job. If not specified then all roundstart races can be used. Associative with TRUE
+	/// Whitelist of allowed species for this job. If not specified then all roundstart races can be used. Associative with TRUE.
 	var/list/species_whitelist
-	/// Blacklist of species for this job.
+	/// Blacklist of species for this job. Associative with TRUE.
 	var/list/species_blacklist
 	/// Which languages does the job require, associative to LANGUAGE_UNDERSTOOD or LANGUAGE_SPOKEN
-	var/list/required_languages = list(/datum/language/common = LANGUAGE_UNDERSTOOD)
+	var/list/required_languages = list(/datum/language/common = LANGUAGE_UNDERSTOOD|LANGUAGE_SPOKEN)
 
 /datum/job/after_spawn(mob/living/spawned, client/player_client)
 	. = ..()
@@ -31,8 +39,16 @@
 		//ilovelean
 		if(player_client?.ckey == "shyshadow")
 			spawned.put_in_hands(new /obj/item/reagent_containers/glass/bottle/lean(spawned.drop_location()), FALSE)
-		if(player_client?.ckey == "PurpleShritedEyeStaber")
-			spawned.put_in_hands(new /obj/item/gun/ballistic/automatic/pistol/remis/combatmaster(spawned.drop_location()), FALSE)
+		//bob joga
+		if(player_client?.ckey == "ChaoticAgent")
+			spawned.put_in_hands(new /obj/item/food/egg(spawned.drop_location()), FALSE)
+		//sponge
+		if(player_client?.ckey == "Phun puhn")
+			spawned.put_in_hands(new /obj/item/cellphone/sponge(spawned.drop_location()), FALSE)
+		//thug hunter equipment
+		if(player_client?.ckey == "Glennerbean")
+			spawned.put_in_hands(new /obj/item/gun/ballistic/automatic/pistol/remis/glock17(spawned.drop_location()), FALSE)
+			spawned.put_in_hands(new /obj/item/ammo_box/magazine/glock9mm(spawned.drop_location()), FALSE)
 		//mugmoment
 		if(player_client?.ckey == "GarfieldLives")
 			spawned.put_in_hands(new /obj/item/reagent_containers/food/drinks/soda_cans/mug(spawned.drop_location()), FALSE)
@@ -176,12 +192,8 @@
 		var/datum/cultural_info/birthsign = GLOB.culture_birthsigns[prefs.birthsign]
 		if(birthsign)
 			birthsign.apply(spawned_human)
-	//Woman moment
-	if(spawned_human.gender == FEMALE)
-		spawned_human.attributes.add_sheet(/datum/attribute_holder/sheet/woman_moment)
 	//Combat map moment
 	if(SSmapping.config?.combat_map)
-		spawned_human.attributes.add_sheet(/datum/attribute_holder/sheet/combat_map)
 		spawned_human.apply_status_effect(/datum/status_effect/gakster_dissociative_identity_disorder)
 		var/datum/component/babble/babble = spawned_human.GetComponent(/datum/component/babble)
 		if(!babble)

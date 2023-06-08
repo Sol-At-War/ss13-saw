@@ -12,5 +12,11 @@ GLOBAL_LIST_INIT(last_names_werebird, world.file2list("modular_septic/strings/na
 
 GLOBAL_LIST_INIT(homie_names, world.file2list("modular_septic/strings/names/homie_names.txt"))
 
+GLOBAL_LIST_INIT(random_adjectives, world.file2list('modular_septic/strings/random_adjectives.txt'))
+
+GLOBAL_LIST_INIT(denominator_first, world.file2list("modular_septic/strings/names/denominator_first.txt"))
+GLOBAL_LIST_INIT(denominator_last, world.file2list("modular_septic/strings/names/denominator_last.txt"))
+
 GLOBAL_LIST_EMPTY(name_to_chat_color)
 GLOBAL_LIST_EMPTY(name_to_chat_color_darkened)
+

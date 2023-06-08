@@ -39,11 +39,31 @@
 	return jointext(binguslist, "")
 
 /proc/fail_string(capitalize = FALSE)
-	var/string = pick("crap", "dang", "damn", "damn it", "shit", "piss", "ugh", "unf", "agh", "fuck", "hell on earth", "misery", "tarnation", "curse", "agony", "failure", "no")
-	return (capitalize ? capitalize(string) : string)
+	return copytext(capitalize ? capitalize(pick(GLOB.whoopsie)) : pick(GLOB.whoopsie), 1, -1)
 
 /proc/fail_msg()
-	return "[fail_string(TRUE)]!"
+	return capitalize(pick(GLOB.whoopsie))
+
+/proc/random_adjective()
+	return pick(GLOB.random_adjectives)
+
+/proc/eww_msg()
+	return capitalize(pick(GLOB.eww))
+
+/proc/xbox_rage_msg()
+	return capitalize(pick(GLOB.xbox_rage))
+
+/proc/godforsaken_success()
+	return capitalize(pick(GLOB.godforsaken_success))
+
+/proc/godforsaken_failure()
+	return capitalize(pick(GLOB.godforsaken_failure))
+
+/proc/denominator_first()
+	return capitalize(pick(GLOB.denominator_first))
+
+/proc/denominator_last()
+	return capitalize(pick(GLOB.denominator_last))
 
 /proc/click_fail_msg()
 	return span_alert(pick("I'm not ready!", "No!", "I did all i could!", "I can't!", "Not yet!"))
@@ -82,3 +102,12 @@
 				else
 					malbolge += pick(GLOB.alphabet_upper)
 	return malbolge
+
+/proc/chat_progress_characters(progressed = 0, total = 10)
+	. = ""
+	progressed = min(progressed, total)
+	for(var/i in 1 to progressed)
+		. += "*"
+	var/remaining = total-progressed
+	for(var/i in 1 to remaining)
+		. += "-"

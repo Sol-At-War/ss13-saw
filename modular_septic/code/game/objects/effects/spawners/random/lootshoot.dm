@@ -5,6 +5,24 @@
 	spawn_all_loot = FALSE
 	spawn_random_offset = TRUE
 	loot = list(
+		//MISC loot
+		/obj/item/card/id/advanced/gold/captains_spare = 2,
+		/obj/item/wrench = 1,
+		/obj/item/hammer = 2, //swag
+		/obj/item/ammo_casing/l40mm = 2,
+		/obj/item/ammo_casing/l40mm/inc = 2,
+		/obj/item/food/canned/beef = 3,
+		/obj/item/food/canned/beans = 3,
+		/obj/item/ammo_casing/batteries = 6,
+		/obj/item/deviouslick/broken_lcd = 5,
+		/obj/item/book/ccp_propaganda = 3,
+		/obj/item/toothbrush/random = 4,
+		/obj/item/stack/cable_coil = 3,
+		/obj/item/ammo_casing/batteries/bigvolt = 3,
+		//CLOTHING
+		/obj/item/ballistic_mechanisms/visor = 1,
+		/obj/item/storage/backpack/satchel/itobe = 0.2,
+		/obj/item/storage/firstaid/morango = 1,
 	)
 
 /obj/effect/spawner/random/lootshoot/rare
@@ -22,7 +40,7 @@
 		/obj/item/gun/ballistic/shotgun/automatic/combat = 1,
 		/obj/item/gun/ballistic/shotgun/automatic/b2000 = 1,
 		/obj/item/gun/ballistic/shotgun/automatic/b2021 = 1,
-		/obj/item/gun/ballistic/shotgun/ithaca/lethal = 2,
+		/obj/item/gun/ballistic/shotgun/ithaca = 2,
 		/obj/item/gun/ballistic/shotgun/abyss = 0.5,
 		//Rare
 		/obj/item/gun/ballistic/shotgun/bolas = 1,
@@ -43,7 +61,6 @@
 		/obj/item/card/id/advanced/gold/captains_spare = 2,
 		/obj/item/wrench = 1,
 		/obj/item/hammer = 2, //swag
-		/obj/item/geiger_counter = 5,
 		/obj/item/ammo_casing/l40mm = 2,
 		/obj/item/ammo_casing/l40mm/inc = 2,
 		/obj/item/food/canned/beef = 3,
@@ -67,7 +84,6 @@
 		/obj/item/wrench = 5,
 		/obj/item/hammer = 5, //swag
 		/obj/item/melee/energy/sword/kelzad = 1,
-		/obj/item/geiger_counter = 5,
 		/obj/item/ammo_casing/l40mm = 2,
 		/obj/item/ammo_casing/l40mm/inc = 2,
 		/obj/item/food/canned/beef = 3,

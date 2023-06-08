@@ -22,17 +22,10 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/lobby)
 /atom/movable/screen/lobby/button/Initialize(mapload)
 	. = ..()
 	if(highlight_eyeball && !eyeball_image)
-		eyeball_image = image('modular_septic/icons/hud/lobby/eyeball.dmi', "eyeball")
+		eyeball_image = image('modular_septic/icons/hud/lobby/eyeball.dmi', null)
 		eyeball_image.transform = eyeball_image.transform.Scale(eyeball_scale_x, eyeball_scale_y)
 		eyeball_image.pixel_x = eyeball_pixel_x
 		eyeball_image.pixel_y = eyeball_pixel_y
-
-/atom/movable/screen/lobby/background/Initialize(mapload)
-	. = ..()
-	if(SSmapping.config?.combat_map)
-		icon = 'modular_septic/icons/hud/lobby/title_efn.dmi'
-		icon_state = "title"
-		screen_loc = "SOUTH+12,CENTER:-120"
 
 /atom/movable/screen/lobby/button/update_overlays()
 	. = ..()
@@ -60,21 +53,21 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/lobby)
 		SEND_SOUND(usr.client, ready_sound)
 
 /atom/movable/screen/lobby/background
-	icon = 'modular_septic/icons/hud/lobby/title.dmi'
-	icon_state = "title"
-	screen_loc = "SOUTH+12,CENTER:-120"
+	icon = null
+	icon_state = null
+	screen_loc = null
 
 /atom/movable/screen/lobby/button/character_setup
 	icon = 'modular_septic/icons/hud/lobby/character_setup.dmi'
-	screen_loc = "SOUTH+10:-6,CENTER:-54"
+	screen_loc = "SOUTH:+53,CENTER:-335"
 
 /atom/movable/screen/lobby/button/settings
 	icon = 'modular_septic/icons/hud/lobby/settings.dmi'
-	screen_loc = "SOUTH+8:-6,CENTER:-54"
+	screen_loc = "SOUTH:-6,CENTER:+218"
 
 /atom/movable/screen/lobby/button/ready
 	icon = 'modular_septic/icons/hud/lobby/ready.dmi'
-	screen_loc = "SOUTH+6:-6,CENTER:-54"
+	screen_loc = "SOUTH:-6,CENTER:-335"
 
 #define FUCKING_IDIOT_MESSAGE "Please remember to properly setup your character, or they will possibly be a retarded, green haired mute!"
 
@@ -85,7 +78,7 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/lobby)
 
 /atom/movable/screen/lobby/button/join
 	icon = 'modular_septic/icons/hud/lobby/join.dmi'
-	screen_loc = "SOUTH+6:-6,CENTER:-54"
+	screen_loc = "SOUTH:-6,CENTER:-335"
 
 /atom/movable/screen/lobby/button/join/Click(location, control, params)
 	. = ..()
@@ -97,11 +90,15 @@ INITIALIZE_IMMEDIATE(/atom/movable/screen/lobby)
 	icon = 'modular_septic/icons/hud/lobby/observe.dmi'
 	screen_loc = "SOUTH+4:-6,CENTER:-54"
 
+/atom/movable/screen/lobby/button/observe/Initialize(mapload)
+	. = ..()
+	qdel(src)
+
 /atom/movable/screen/lobby/button/credits
 	icon = 'modular_septic/icons/hud/lobby/credits.dmi'
 	icon_state = "credits"
 	base_icon_state = "credits"
-	screen_loc = "SOUTH+2:-6,CENTER:-54"
+	screen_loc = "SOUTH:+54,CENTER:+218"
 
 /atom/movable/screen/lobby/button/credits/Click(location, control, params)
 	. = ..()

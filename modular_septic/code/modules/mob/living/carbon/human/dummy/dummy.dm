@@ -4,6 +4,12 @@
 	num_eyes = 2
 	attributes = null
 
+/mob/living/carbon/human/dummy/Initialize(mapload)
+	. = ..()
+	if(dna)
+		dna.features["body_size"] = BODY_SIZE_NORMAL
+		dna.features["uses_skintones"] = FALSE
+
 /mob/living/carbon/human/dummy/update_smelly()
 	return
 

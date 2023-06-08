@@ -42,8 +42,8 @@
 	return embed_attempt
 
 // Proper outlines
-/obj/item/apply_outline(outline_color = null)
-	if(get(src, /mob) != usr || QDELETED(src) || isobserver(usr)) //cancel if the item isn't in an inventory, is being deleted, or if the person hovering is a ghost (so that people spectating you don't randomly make your items glow)
+/obj/item/apply_outline(outline_color)
+	if((get(src, /mob) != usr) || QDELETED(src) || isobserver(usr)) //cancel if the item isn't in an inventory, is being deleted, or if the person hovering is a ghost (so that people spectating you don't randomly make your items glow)
 		return
 	var/theme = lowertext(usr.client?.prefs?.read_preference(/datum/preference/choiced/ui_style))
 	//if we weren't provided with a color, take the theme's color
@@ -159,7 +159,7 @@
 
 //cool drop and throw effect
 /obj/item/proc/do_messy(pixel_variation = 8, angle_variation = 360, duration = 0)
-	if(item_flags & NO_PIXEL_RANDOM_DROP)
+	if(item_flags & NO_ANGLE_RANDOM_DROP)
 		return
 	animate(src, pixel_x = (base_pixel_x+rand(-pixel_variation,pixel_variation)), duration)
 	animate(src, pixel_y = (base_pixel_y+rand(-pixel_variation,pixel_variation)), duration)

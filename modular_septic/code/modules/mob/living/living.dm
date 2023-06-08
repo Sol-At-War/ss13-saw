@@ -48,7 +48,7 @@
 	//Freerunning makes it easier
 	if(HAS_TRAIT(src, TRAIT_FREERUNNING))
 		difficulty -= 5
-	var/diceroll = diceroll(GET_MOB_SKILL_VALUE(src, SKILL_ACROBATICS)-difficulty, 10, 3, 6)
+	var/diceroll = diceroll(GET_MOB_SKILL_VALUE(src, SKILL_ACROBATICS)-difficulty, context = DICE_CONTEXT_MENTAL)
 	switch(diceroll)
 		//Lucky nigga
 		if(DICE_CRIT_SUCCESS)
@@ -84,6 +84,7 @@
 			for(var/limb in oofzones)
 				apply_damage(ouch, damagetype = BRUTE, def_zone = pick(BODY_ZONE_PRECISE_L_FOOT, BODY_ZONE_PRECISE_R_FOOT))
 			CombatKnockdown(levels * 50, levels * 4 SECONDS, levels * 2 SECONDS, TRUE)
+	playsound(src, 'modular_septic/sound/effects/bodyfall.ogg', 70, FALSE)
 
 /mob/living/get_temperature(datum/gas_mixture/environment)
 	var/loc_temp = environment ? environment.temperature : T0C
@@ -142,14 +143,15 @@
 	combat_mode = new_mode
 	if(hud_used?.action_intent)
 		hud_used.action_intent.update_appearance()
+	SEND_SIGNAL(src, COMSIG_LIVING_SET_COMBAT_MODE, new_mode, silent)
 	if(silent)
 		return
 	if(combat_mode)
-		playsound_local(src, 'sound/misc/ui_togglecombat.ogg', 25, FALSE, pressure_affected = FALSE) //Sound from interbay!
+		playsound_local(src, 'modular_septic/sound/interface/ui_toggle.ogg', 30, FALSE, pressure_affected = FALSE) //Sound from interbay!
 		if(mind?.combat_music)
 			SSdroning.play_combat_music(mind.combat_music, client)
 	else
-		playsound_local(src, 'sound/misc/ui_toggleoffcombat.ogg', 25, FALSE, pressure_affected = FALSE) //Slightly modified version of the above
+		playsound_local(src, 'modular_septic/sound/interface/ui_toggleoff.ogg', 30, FALSE, pressure_affected = FALSE) //Slightly modified version of the above
 		if(mind?.combat_music)
 			SSdroning.play_area_sound(get_area(src), client)
 

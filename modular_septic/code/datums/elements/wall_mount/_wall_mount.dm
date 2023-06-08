@@ -1,7 +1,7 @@
 /datum/element/wall_mount
 	element_flags = ELEMENT_DETACH | ELEMENT_BESPOKE
 	var/plane_upper = ABOVE_FRILL_PLANE
-	var/plane_lower = GAME_PLANE
+	var/plane_lower = GAME_PLANE_UPPER
 
 /datum/element/wall_mount/Attach(datum/target, plane_upper = ABOVE_FRILL_PLANE, plane_lower = GAME_PLANE)
 	if(!ismovable(target))
@@ -41,5 +41,5 @@
 			target.pixel_x = 11
 			target.pixel_y = 16
 		else
-			target.plane = plane_upper
-			target.pixel_y = -8
+			target.plane = plane_lower
+			target.pixel_y = 35

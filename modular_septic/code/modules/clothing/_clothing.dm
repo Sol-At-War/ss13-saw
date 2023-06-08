@@ -31,7 +31,7 @@
 	/// How much integrity to give each limb
 	limb_integrity = 0
 	// Assume that clothing isn't too weighty by default
-	carry_weight = 2
+	carry_weight = 2 KILOGRAMS
 
 /obj/item/clothing/update_overlays()
 	. = ..()
@@ -47,7 +47,7 @@
 		damaged_clothes_icon.Blend("#ffffff", ICON_ADD)
 		//adds damage effect and the remaining white areas become transparant
 		damaged_clothes_icon.Blend(icon('modular_septic/icons/effects/item_damage.dmi', "itemdamaged"), ICON_MULTIPLY)
-		//makes it black because remis is a stupid nigger
+		//makes it black because remis is a stupid nigger kys
 		damaged_clothes_icon.Blend("#000000", ICON_MULTIPLY)
 		damaged_clothes_icon = fcopy_rsc(damaged_clothes_icon)
 		damaged_clothes_icons[index] = damaged_clothes_icon

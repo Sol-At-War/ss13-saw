@@ -93,7 +93,7 @@
 		I.pulledby.stop_pulling()
 	if(silent)
 		prevent_warning = TRUE
-	if(!_insert_physical_item(I))
+	if(!_insert_physical_item(I, user = M))
 		if(moved)
 			if(M)
 				if(!M.put_in_active_hand(I))
@@ -265,7 +265,7 @@
 	return master.slave_can_insert_object(src, I, stop_messages, M)
 
 // No real location
-/datum/component/storage/concrete/organ/_insert_physical_item(obj/item/I, override)
+/datum/component/storage/concrete/organ/_insert_physical_item(obj/item/I, override = FALSE, mob/living/user)
 	. = FALSE
 	var/obj/item/organ/O = I
 	if(istype(I, /obj/item/mmi))
@@ -280,7 +280,7 @@
 		if(!(O in contents()))
 			var/mob/living/carbon/carbon_parent = parent
 			O.forceMove(bodypart_affected)
-			O.Insert(carbon_parent)
+			O.Insert(carbon_parent, new_zone = user.zone_selected)
 			update_insides()
 	else
 		if(!(I in contents()))
@@ -360,7 +360,7 @@
 		//oof
 		if(violent_bone_removal)
 			if(bodypart_affected?.can_dismember())
-				bodypart_affected.apply_dismember(WOUND_PIERCE, FALSE, FALSE)
+				bodypart_affected.apply_dismember(WOUND_PIERCE, TRUE, FALSE)
 			else
 				bodypart_affected.receive_damage(50, sharpness = SHARP_POINTY)
 		return

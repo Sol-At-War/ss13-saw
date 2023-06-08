@@ -8,7 +8,7 @@
 	opacity = TRUE
 	density = TRUE
 	move_resist = MOVE_FORCE_VERY_STRONG
-	plane = GAME_PLANE_MIDDLE
+	plane = GAME_PLANE_ABOVE_WINDOW
 	layer = OPEN_DOOR_LAYER
 	power_channel = AREA_USAGE_ENVIRON
 	pass_flags_self = PASSDOORS
@@ -205,8 +205,6 @@
 	return try_to_activate_door(user)
 	*/
 	//SEPTIC EDIT BEGIN
-	if(LAZYACCESS(modifiers, RIGHT_CLICK))
-		return try_door_unlock(user)
 	if(try_remove_seal(user))
 		return
 	if(try_safety_unlock(user))

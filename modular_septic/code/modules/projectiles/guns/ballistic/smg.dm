@@ -127,8 +127,8 @@
 		"return_burst_speed" = 0.5, \
 	)
 	client_recoil_animation_information = list(
-		"strength" = 0.3, \
-		"duration" = 2, \
+		"strength" = 0.15, \
+		"duration" = 1, \
 	)
 	custom_price = 20000
 
@@ -167,7 +167,7 @@
 	flight_y_offset = 14
 	client_recoil_animation_information = list(
 		"strength" = 0.25, \
-		"duration" = 2, \
+		"duration" = 1, \
 	)
 
 // SUPPRESSED HK SMG
@@ -186,6 +186,7 @@
 	burst_size = 3
 	mag_type = /obj/item/ammo_box/magazine/hksmg380
 	slot_flags = ITEM_SLOT_BACK | ITEM_SLOT_SUITSTORE
+	empty_icon_state = FALSE
 	can_suppress = TRUE
 	can_unsuppress = FALSE
 	w_class = WEIGHT_CLASS_SMALL
@@ -201,3 +202,59 @@
 
 /obj/item/gun/ballistic/automatic/remis/smg/solitario/suppressed/no_mag
 	spawnwithmagazine = FALSE
+
+// KAKAKAKAKAKAKAKAKAKKAKAKAKAKAKAKA REALLYGOODCOMICS GUN I LOVE REALLYGOODCOMICS YES SIR I AM AN AIR MARSHAL
+/obj/item/gun/ballistic/automatic/remis/smg/bolsa
+	name = "\improper Bolsa R6 submachine gun"
+	desc = "An antique, compact submachine gun that is prohibited to civillians in many stations. Discontinued, but it still has It's strengths, that being the extendable stock and the size."
+	icon = 'modular_septic/icons/obj/items/guns/48x32.dmi'
+	lefthand_file = 'modular_septic/icons/obj/items/guns/inhands/smg_lefthand.dmi'
+	righthand_file = 'modular_septic/icons/obj/items/guns/inhands/smg_righthand.dmi'
+	worn_icon_state = "uzi"
+	inhand_icon_state = "uzi"
+	base_icon_state = "uzi"
+	icon_state = "uzi"
+	load_sound = 'modular_septic/sound/weapons/guns/smg/bolsa_magin.wav'
+	load_empty_sound = 'modular_septic/sound/weapons/guns/smg/bolsa_magin.wav'
+	eject_empty_sound = 'modular_septic/sound/weapons/guns/smg/bolsa_magout.wav'
+	eject_sound = 'modular_septic/sound/weapons/guns/smg/bolsa_magout.wav'
+	rack_sound = 'modular_septic/sound/weapons/guns/smg/bolsa_rack.wav'
+	suppressed_sound = 'modular_septic/sound/weapons/guns/smg/bolsa_silenced.wav'
+	fire_sound = 'modular_septic/sound/weapons/guns/smg/bolsa.wav'
+	lock_back_sound = 'modular_septic/sound/weapons/guns/smg/bolsa_lockback.wav'
+	bolt_drop_sound = 'modular_septic/sound/weapons/guns/smg/bolsa_lockin.wav'
+	fireselector_auto = 'modular_septic/sound/weapons/guns/smg/bolsa_safety.wav'
+	fireselector_burst = 'modular_septic/sound/weapons/guns/smg/bolsa_safety.wav'
+	fireselector_semi = 'modular_septic/sound/weapons/guns/smg/bolsa_safety.wav'
+	safety_off_sound = 'modular_septic/sound/weapons/guns/smg/bolsa_safety.wav'
+	safety_on_sound = 'modular_septic/sound/weapons/guns/smg/bolsa_safety.wav'
+	mag_type =	/obj/item/ammo_box/magazine/uzi9mm
+	foldable = TRUE
+	folded = TRUE
+	w_class = WEIGHT_CLASS_NORMAL
+	weapon_weight = WEAPON_MEDIUM
+	bolt_type = BOLT_TYPE_OPEN
+	slot_flags = ITEM_SLOT_BELT
+	carry_weight = 2.2 KILOGRAMS
+	force = 10
+	recoil = 0.2
+	fire_delay = 2
+	burst_size = 2
+	can_suppress = TRUE
+	suppressor_x_offset = 2
+	gunshot_animation_information = list(
+		"pixel_x" = 21, \
+		"pixel_y" = 5, \
+		"inactive_wben_suppressed" = TRUE, \
+	)
+	recoil_animation_information = list(
+		"recoil_angle_upper" = -10, \
+		"recoil_angle_lower" = -20, \
+		"recoil_burst_speed" = 0.5, \
+		"return_burst_speed" = 0.5, \
+	)
+	client_recoil_animation_information = list(
+		"strength" = 0.2,
+		"duration" = 1,
+	)
+	custom_price = 20000

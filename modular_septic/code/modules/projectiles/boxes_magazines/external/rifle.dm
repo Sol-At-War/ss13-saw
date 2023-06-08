@@ -1,10 +1,10 @@
-/obj/item/ammo_box/magazine/a762winter
-	name = "Inverno Genocídio universal magazine (7.62)"
+/obj/item/ammo_box/magazine/a556winter
+	name = "Inverno Genocídio universal magazine (5.56)"
 	icon = 'modular_septic/icons/obj/items/ammo/rifle.dmi'
 	icon_state = "inverno"
 	base_icon_state = "inverno"
-	ammo_type = /obj/item/ammo_casing/a762
-	caliber = CALIBER_A762
+	ammo_type = /obj/item/ammo_casing/a556
+	caliber = CALIBER_A556
 	max_ammo = 35
 	multiple_sprites = AMMO_BOX_ONE_SPRITE
 	drop_sound = 'modular_septic/sound/weapons/plastic_drop.ogg'
@@ -12,9 +12,27 @@
 	tetris_width = 32
 	tetris_height = 64
 
-/obj/item/ammo_box/magazine/a762winter/update_icon_state()
+/obj/item/ammo_box/magazine/a556winter/update_icon_state()
 	. = ..()
 	icon_state = "[base_icon_state]-[ammo_count() ? 35 : 0]"
+
+/obj/item/ammo_box/magazine/a556g36
+	name = "Perdedor magazine (5.56)"
+	icon = 'modular_septic/icons/obj/items/ammo/rifle.dmi'
+	icon_state = "g36"
+	base_icon_state = "g36"
+	ammo_type = /obj/item/ammo_casing/a556
+	caliber = CALIBER_A556
+	max_ammo = 30
+	multiple_sprites = AMMO_BOX_ONE_SPRITE
+	drop_sound = 'modular_septic/sound/weapons/plastic_drop.ogg'
+	pickup_sound = 'modular_septic/sound/weapons/plastic_pickup.ogg'
+	tetris_width = 32
+	tetris_height = 64
+
+/obj/item/ammo_box/magazine/a556g36/update_icon_state()
+	. = ..()
+	icon_state = "[base_icon_state]-[CEILING(ammo_count(), 5)]"
 
 /obj/item/ammo_box/magazine/a545
 	name = "Abyss-Platform universal magazine (5.45x39)"

@@ -4,8 +4,8 @@
 		BODY_ZONE_PRECISE_L_HAND = /obj/item/bodypart/l_hand,
 		BODY_ZONE_R_ARM = /obj/item/bodypart/r_arm,
 		BODY_ZONE_PRECISE_R_HAND = /obj/item/bodypart/r_hand,
-		BODY_ZONE_PRECISE_L_EYE = /obj/item/bodypart/l_eyesocket,
-		BODY_ZONE_PRECISE_R_EYE = /obj/item/bodypart/r_eyesocket,
+		BODY_ZONE_PRECISE_L_EYE = /obj/item/bodypart/l_eyelid,
+		BODY_ZONE_PRECISE_R_EYE = /obj/item/bodypart/r_eyelid,
 		BODY_ZONE_PRECISE_MOUTH = /obj/item/bodypart/mouth,
 		BODY_ZONE_PRECISE_FACE = /obj/item/bodypart/face,
 		BODY_ZONE_PRECISE_NECK = /obj/item/bodypart/neck,
@@ -23,7 +23,6 @@
 	var/mutantkidneys = /obj/item/organ/kidneys
 	var/mutantintestines = /obj/item/organ/intestines
 	var/mutantbladder = /obj/item/organ/bladder
-	var/mutantanus = /obj/item/organ/anus
 	/// List of quirks the mob gains upon gaining this species
 	var/list/inherent_quirks
 	/// Attribute sheet the mob gains upon gaining this species (ADDITIVE)
@@ -387,8 +386,7 @@
 				oldorgan.setOrganDamage(0)
 			if((slot in PAIRED_ORGAN_SLOTS) && (LAZYLEN(oldorgans) < 2))
 				var/side = LEFT_SIDE
-				for(var/thinge in oldorgans)
-					var/obj/item/organ/oldorgan = thinge
+				for(var/obj/item/organ/oldorgan as anything in oldorgans)
 					if(oldorgan.side == LEFT_SIDE)
 						side = RIGHT_SIDE
 						break
@@ -411,7 +409,7 @@
 			// just yet as we'll be properly replacing it later
 			if(mutantorgan in mutant_organs)
 				continue
-			for(var/obj/item/organ/killme in C.getorganlist(mutantorgan))
+			for(var/obj/item/organ/killme as anything in C.getorganlist(mutantorgan))
 				killme.Remove(C, TRUE)
 				qdel(killme)
 	for(var/organ_path in mutant_organs)

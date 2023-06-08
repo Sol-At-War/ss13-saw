@@ -15,6 +15,10 @@
 
 	/// How much shit we have on our hands
 	var/shit_in_hands = 0
+	/// How much cum we have on our hands
+	var/cum_in_hands = 0
+	/// How much femcum we have on our hands
+	var/femcum_in_hands = 0
 
 	// ~ACTIVE DEFENSE VARIABLES
 	/// Dodging capability flags

@@ -15,16 +15,6 @@
 			//sprinting makes you sweaty faster
 			if(is_sprinting)
 				germ_level_increase *= 2
-				if(prob(66))
-					sound_hint()
-			else
-				switch(m_intent)
-					if(MOVE_INTENT_RUN)
-						if(prob(33))
-							sound_hint()
-					if(MOVE_INTENT_WALK)
-						if(prob(10))
-							sound_hint()
 			adjust_germ_level(germ_level_increase)
 			if(!pulledby)
 				if(is_sprinting)
@@ -89,7 +79,7 @@
 
 /mob/living/carbon/proc/ram_stun()
 	//Deal with knockdown
-	switch(diceroll(GET_MOB_ATTRIBUTE_VALUE(src, STAT_DEXTERITY)))
+	switch(diceroll(GET_MOB_ATTRIBUTE_VALUE(src, STAT_DEXTERITY), context = DICE_CONTEXT_PHYSICAL))
 		if(DICE_SUCCESS)
 			Immobilize(2 SECONDS)
 		if(DICE_FAILURE)
@@ -100,7 +90,7 @@
 			Immobilize(5 SECONDS)
 			CombatKnockdown(rand(75, 100))
 	//Deal with damage
-	switch(diceroll(GET_MOB_ATTRIBUTE_VALUE(src, STAT_ENDURANCE)))
+	switch(diceroll(GET_MOB_ATTRIBUTE_VALUE(src, STAT_ENDURANCE), context = DICE_CONTEXT_PHYSICAL))
 		if(DICE_SUCCESS)
 			var/obj/item/bodypart/head = get_bodypart(BODY_ZONE_HEAD)
 			if(head)

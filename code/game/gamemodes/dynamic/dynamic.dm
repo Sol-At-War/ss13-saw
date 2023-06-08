@@ -151,10 +151,10 @@ GLOBAL_VAR_INIT(dynamic_forced_threat_level, -1)
 	var/waittime_l = 600
 	/// What is the higher bound of when the roundstart annoucement is sent out?
 	var/waittime_h = 1800
-	
+
 	/// Maximum amount of threat allowed to generate.
 	var/max_threat_level = 100
-	
+
 
 /datum/game_mode/dynamic/admin_panel()
 	var/list/dat = list("<html><head><meta http-equiv='Content-Type' content='text/html; charset=UTF-8'><title>Game Mode Panel</title></head><body><h1><B>Game Mode Panel</B></h1>")
@@ -377,10 +377,9 @@ GLOBAL_VAR_INIT(dynamic_forced_threat_level, -1)
 			candidates.Add(player)
 	log_game("DYNAMIC: Listing [roundstart_rules.len] round start rulesets, and [candidates.len] players ready.")
 	if (candidates.len <= 0)
-		log_game("DYNAMIC: [candidates.len] candidates.")
-		return TRUE
+		log_game("DYNAMIC: No candidates! This may cause issues.")
 
-	if(GLOB.dynamic_forced_roundstart_ruleset.len > 0)
+	if(length(GLOB.dynamic_forced_roundstart_ruleset))
 		rigged_roundstart()
 	else
 		roundstart(roundstart_rules)
@@ -389,10 +388,10 @@ GLOBAL_VAR_INIT(dynamic_forced_threat_level, -1)
 	threat_log += "[worldtime2text()]: [round_start_budget] round start budget was left, donating it to midrounds."
 	mid_round_budget += round_start_budget
 
-	var/starting_rulesets = ""
-	for (var/datum/dynamic_ruleset/roundstart/DR in executed_rules)
-		starting_rulesets += "[DR.name], "
-	log_game("DYNAMIC: Picked the following roundstart rules: [starting_rulesets]")
+	var/list/rulesets_names = list()
+	for (var/datum/dynamic_ruleset/DR in executed_rules)
+		rulesets_names += DR.name
+	log_game("DYNAMIC: Picked the following roundstart rules: [english_list(rulesets_names, "None")].")
 	candidates.Cut()
 	return TRUE
 

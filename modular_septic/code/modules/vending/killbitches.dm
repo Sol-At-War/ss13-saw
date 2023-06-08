@@ -35,7 +35,7 @@
 		/obj/item/ammo_box/magazine/a762svd = 4,
 		/obj/item/ammo_box/magazine/a49234g11 = 20,
 		/obj/item/ammo_box/magazine/a545 = 18,
-		/obj/item/ammo_box/magazine/a762winter = 13,
+		/obj/item/ammo_box/magazine/a556winter = 13,
 		/obj/item/gun/ballistic/automatic/remis/smg/bastardo = 8,
 		/obj/item/gun/ballistic/automatic/remis/smg/solitario = 20,
 		/obj/item/gun/ballistic/automatic/remis/smg/thump = 5,
@@ -115,7 +115,6 @@
 	default_price = 0
 	extra_price = 0
 	products = list(
-		/obj/item/reagent_containers/hypospray/medipen/blacktar = 40,
 		/obj/item/reagent_containers/hypospray/medipen/antibiotic = 50,
 		/obj/item/stack/medical/suture/medicated = 40,
 		/obj/item/scalpel = 40,
@@ -140,12 +139,14 @@
 		/obj/item/ammo_box/magazine/ammo_stack/a276/loaded = 20,
 		/obj/item/ammo_box/magazine/ammo_stack/shotgun/buckshot/loaded = 20,
 		/obj/item/ammo_box/magazine/ammo_stack/shotgun/bolas/loaded = 20,
+		/obj/item/ammo_box/magazine/ammo_stack/shotgun/bolas/slugs/loaded = 20,
 		/obj/item/flashlight/seclite = 5,
+		/obj/item/ammo_box/magazine/uzi9mm = 12,
 		/obj/item/ammo_box/magazine/a762g3 = 4,
 		/obj/item/ammo_box/magazine/a762svd = 4,
 		/obj/item/ammo_box/magazine/a49234g11 = 20,
 		/obj/item/ammo_box/magazine/a545 = 18,
-		/obj/item/ammo_box/magazine/a762winter = 13,
+		/obj/item/ammo_box/magazine/a556winter = 13,
 		/obj/item/ammo_box/magazine/bastardo9mm = 25,
 		/obj/item/ammo_box/magazine/hksmg22lr = 40,
 		/obj/item/ammo_box/magazine/hksmg380 = 40,

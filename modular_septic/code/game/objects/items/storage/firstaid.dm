@@ -1,5 +1,5 @@
 /obj/item/storage/firstaid
-	carry_weight = 1
+	carry_weight = 1 KILOGRAMS
 
 /obj/item/storage/firstaid/regular/PopulateContents()
 	if(empty)
@@ -180,7 +180,7 @@
 		/obj/item/stack/medical/gauze = 1,
 		/obj/item/stack/medical/ointment = 1,
 		/obj/item/stack/medical/suture/medicated = 2,
-		/obj/item/reagent_containers/hypospray/medipen/blacktar = 2,
+		/obj/item/reagent_containers/hypospray/medipen/retractible/blacktar = 1,
 		/obj/item/reagent_containers/hypospray/medipen/antibiotic = 1,
 		/obj/item/reagent_containers/pill/potassiodide = 2)
 	generate_items_inside(items_inside,src)

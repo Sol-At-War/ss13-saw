@@ -3,7 +3,6 @@
 	icon_state = "revolver"
 	base_icon_state = "revolver"
 	uncocked_icon_state = TRUE
-	uses_cylinder = TRUE
 	cylinder_shows_open = TRUE
 	cylinder_shows_ammo_count = TRUE
 	bolt_type = BOLT_TYPE_BREAK_ACTION
@@ -44,11 +43,15 @@
 		"duration" = 2.5,
 	)
 	w_class = WEIGHT_CLASS_NORMAL
-	carry_weight = 1.5
+	carry_weight = 1.5 KILOGRAMS
 	skill_melee = SKILL_IMPACT_WEAPON
 	skill_ranged = SKILL_PISTOL
 	tetris_width = 64
 	tetris_height = 64
+
+/obj/item/gun/ballistic/revolver/chamber_examine(mob/user)
+	. = ..()
+	. += "The [cylinder_wording] can be spun with <b>alt+click</b>"
 
 /obj/item/gun/ballistic/revolver/get_ammo(countchambered = FALSE, countempties = TRUE)
 	var/boolets = 0 //mature var names for mature people //What If I'm a child?
@@ -88,7 +91,7 @@
 	)
 	safety_flags = GUN_SAFETY_HAS_SAFETY | GUN_SAFETY_ENABLED | GUN_SAFETY_OVERLAY_ENABLED | GUN_SAFETY_OVERLAY_DISABLED
 	mag_type = /obj/item/ammo_box/magazine/internal/cylinder/gado
-	carry_weight = 2
+	carry_weight = 2 KILOGRAMS
 
 // NAMBU REVOLVER
 /obj/item/gun/ballistic/revolver/remis/nova
@@ -112,7 +115,10 @@
 	mag_type = /obj/item/ammo_box/magazine/internal/cylinder/nova
 	can_modify_ammo = TRUE
 	initial_caliber = CALIBER_38
-	carry_weight = 1.5
+	carry_weight = 1.5 KILOGRAMS
+
+/obj/item/gun/ballistic/revolver/remis/nova/pluspee
+	mag_type = /obj/item/ammo_box/magazine/internal/cylinder/nova/pluspee
 
 // Poppy
 /obj/item/gun/ballistic/revolver/remis/poppy
@@ -141,4 +147,4 @@
 		"duration" = 3,
 	)
 	mag_type = /obj/item/ammo_box/magazine/internal/cylinder/poppy
-	carry_weight = 3
+	carry_weight = 3 KILOGRAMS

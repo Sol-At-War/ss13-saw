@@ -14,8 +14,8 @@
 		BODY_ZONE_PRECISE_L_HAND = /obj/item/bodypart/l_hand/homie,
 		BODY_ZONE_R_ARM = /obj/item/bodypart/r_arm/homie,
 		BODY_ZONE_PRECISE_R_HAND = /obj/item/bodypart/r_hand/homie,
-		BODY_ZONE_PRECISE_L_EYE = /obj/item/bodypart/l_eyesocket/homie,
-		BODY_ZONE_PRECISE_R_EYE = /obj/item/bodypart/r_eyesocket/homie,
+		BODY_ZONE_PRECISE_L_EYE = /obj/item/bodypart/l_eyelid/homie,
+		BODY_ZONE_PRECISE_R_EYE = /obj/item/bodypart/r_eyelid/homie,
 		BODY_ZONE_PRECISE_FACE = /obj/item/bodypart/face/homie,
 		BODY_ZONE_PRECISE_MOUTH = /obj/item/bodypart/mouth/homie,
 		BODY_ZONE_PRECISE_NECK = /obj/item/bodypart/neck/homie,
@@ -45,7 +45,7 @@
 	limbs_id = "homie"
 	examine_icon = 'modular_septic/icons/obj/items/deviouslick.dmi'
 	examine_icon_state = "caucasian_homie"
-	var/static/list/homie_types = list("caucasian", "asian", "nigger")
+	var/static/list/homie_types = list("caucasian", "asian", "african")
 	var/homie_type = "caucasian"
 
 /datum/species/homie/New()

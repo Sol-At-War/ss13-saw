@@ -3,14 +3,16 @@
 	desc = "A meta-physical line to a Devious, Godforsaken, and Diabolical Corporation. \n\
 	<div class='infobox'> \
 	Input: 1 cable coil + 1 can of beans - Output = PPK \n\
-	Input: 2 cans of beef stew - Output = Bastardo \n\
+	Input: 2 cans of beef stew - Output = Bolsa SMG \n\
 	Input: 2 PPK Handguns - Output = Th(ump) SMG \n\
 	Input: 3 individual batteries - Output = Inverno Genocidio Rifle \n\
 	Input: 1 Chunky Battery - Output = Federson bolt-action \n\
 	Input: 1 Toobrush - Output = Combat Shotgun \n\
 	Input: 1 Head - Output = Frag Master 9mm \n\
+	Input 1 Stomach - Output = Touro-5 Faceshield \n\
 	Input: 1 (any) computer circuit - Output = Black Pump-action Shotgun \n\
-	Input: 10 wood tiles - Output = Abyss Rifle \n\
+	Input: 8 Carbonylmethamphetamine pills - Output = Abyss Rifle \n\
+	Input: 4 HE Shells - Output = Batata grenade launcher \n\
 	Input: 1 (any) bottle - Output = Solitario-SD \n\
 	Input: 1 Soap Dispenser - Output = Lampiao (SVD) DMR \n\
 	Input: 1 Sounding Rod - Output = Bolt ACR \n\
@@ -31,17 +33,18 @@
     </div>"
 	density = FALSE
 	onstation = FALSE
+	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF | FREEZE_PROOF
 	slogan_delay = 600
 	icon_state = "tiktok"
 	base_icon_state = "tiktok"
 	icon = 'modular_septic/icons/obj/machinery/vending.dmi'
-	product_slogans = "Idiot. FUCKING IDIOT!; Shut up, faggot.; The King is Coming!!; We are in the last moments of the end of days.; Prophesised to happen before the return of Jesus; The Marshmellow Time was wrong then and it; Salvation from God is a Gift.; The Ultimate sacrifice for all of our sins.; Ultimate Metaphysics: Divine Unity, or the Conjugate Whole"
+	product_slogans = "Idiot. FUCKING IDIOT!; Your birth certicificate is an APOLOGY LEGGER from the CLINIC; Shut up, retard.; The King is Coming!!; We are in the last moments of the end of days.; Prophesised to happen before the return of Jesus; The Marshmellow Time was wrong then and it; Salvation from God is a Gift.; The Ultimate sacrifice for all of our sins.; Ultimate Metaphysics: Divine Unity, or the Conjugate Whole"
 	products = list(
-		/obj/item/clothing/under/itobe/agent = 40,
+		/obj/item/storage/backpack/satchel/itobe = 40,
+		/obj/item/clothing/under/itobe = 40,
 		/obj/item/clothing/shoes/jackboots = 40,
 		/obj/item/clothing/gloves/color/black = 40,
-		/obj/item/clothing/glasses/itobe/agent = 40,
-		/obj/item/clothing/suit/armor/vest/alt = 40,
+		/obj/item/clothing/suit/armor/vest/alt/discrete = 40,
 		/obj/item/wrench = 45,
 	)
 	var/list/tiktoklines = list('modular_septic/sound/effects/singer1.wav', 'modular_septic/sound/effects/singer2.wav')

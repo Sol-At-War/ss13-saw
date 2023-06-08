@@ -12,7 +12,7 @@
 	px_x = 0
 	px_y = -8
 	stam_damage_coeff = 1
-	limb_flags = BODYPART_EDIBLE|BODYPART_NO_STUMP|BODYPART_EASY_MAJOR_WOUND|BODYPART_HAS_BONE|BODYPART_HAS_TENDON|BODYPART_HAS_NERVE|BODYPART_HAS_ARTERY //stump should be handled by the neck
+	limb_flags = BODYPART_EDIBLE|BODYPART_NO_STUMP|BODYPART_HAS_BONE|BODYPART_HAS_TENDON|BODYPART_HAS_NERVE|BODYPART_HAS_ARTERY //stump should be handled by the neck
 	children_zones = list(BODY_ZONE_PRECISE_R_EYE, BODY_ZONE_PRECISE_L_EYE, BODY_ZONE_PRECISE_FACE, BODY_ZONE_PRECISE_MOUTH)
 	gender_rendering = TRUE
 
@@ -32,16 +32,15 @@
 	throw_range = 3 //bowling
 	maxdam_wound_penalty = 20 //somewhat hard to hit this cap, better of trying to hit the neck
 	dismemberment_sounds = list(
-		'modular_septic/sound/gore/head_explodie1.ogg',
-		'modular_septic/sound/gore/head_explodie2.ogg',
-		'modular_septic/sound/gore/head_explodie3.ogg',
-		'modular_septic/sound/gore/head_explodie4.ogg',
+		'modular_septic/sound/gore/newhead_explodie1.wav',
+		'modular_septic/sound/gore/newhead_explodie2.wav',
 	)
+	dismemberment_volume = 140
 
 	/// Left eye
-	var/obj/item/bodypart/l_eyesocket/left_eye
+	var/obj/item/bodypart/l_eyelid/left_eye
 	/// Right eye
-	var/obj/item/bodypart/r_eyesocket/right_eye
+	var/obj/item/bodypart/r_eyelid/right_eye
 	/// Face
 	var/obj/item/bodypart/face/face
 	/// Jaw
@@ -73,13 +72,6 @@
 	. = ..()
 	if(owner)
 		REMOVE_TRAIT(owner, TRAIT_DISFIGURED, GERM_LEVEL_TRAIT)
-
-/obj/item/bodypart/head/dismember(dam_type = BRUTE, silent = TRUE, destroy = FALSE, wounding_type = WOUND_SLASH)
-	var/obj/item/bodypart/chungus = owner?.get_bodypart(parent_body_zone)
-	if(chungus)
-		return chungus.dismember(dam_type, silent, destroy, wounding_type)
-	else
-		return ..()
 
 /obj/item/bodypart/head/handle_atom_del(atom/A)
 	if(A == left_eye)
@@ -166,8 +158,7 @@
 /obj/item/bodypart/head/drop_limb(special = FALSE, dismembered = FALSE, ignore_child_limbs = FALSE, destroyed = FALSE, wounding_type = WOUND_SLASH)
 	if(!special)
 		//Drop all worn head items
-		for(var/X in list(owner.glasses, owner.ears, owner.head))
-			var/obj/item/worn_item = X
+		for(var/obj/item/worn_item in list(owner.glasses, owner.ears, owner.head))
 			owner.dropItemToGround(worn_item, force = TRUE)
 
 	for(var/creamtype in GLOB.creamed_types)

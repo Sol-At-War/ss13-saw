@@ -56,7 +56,6 @@
 		if(75 to INFINITY)
 			flick("pain", hud_used.pain_flash)
 
-
 /mob/proc/flash_pain_endorphine()
 	if(!hud_used?.pain_flash)
 		return
@@ -68,6 +67,13 @@
 	switch(power)
 		if(5 to INFINITY)
 			flick("static", hud_used.pain_flash)
+
+/mob/proc/flash_screen_flash(power)
+	if(!hud_used?.pain_flash)
+		return
+	switch(power)
+		if(5 to INFINITY)
+			flick("flash_anim", hud_used.pain_flash)
 
 /mob/proc/flash_darkness(power)
 	if(!hud_used?.pain_flash)

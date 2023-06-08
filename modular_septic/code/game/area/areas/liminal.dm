@@ -34,6 +34,23 @@
 	mood_message = "<span class='bloody'>This area is pretty nice!</span>\n"
 	mood_bonus = -1
 
+/area/maintenance/liminal/labs
+	name = "Liminal Labs"
+	icon_state = "engine"
+	droning_sound = DRONING_COMPLEX
+	ambience_index = AMBIENCE_LAB
+	mood_message = "<span class='bloody'>It feels safer here.</span>\n"
+	mood_bonus = 1
+
+/area/maintenance/liminal/termination_centre
+	name = "Liminal Termination Centre"
+	icon_state = "engine"
+	droning_sound = DRONING_COMPLEX
+	ambience_index = AMBIENCE_ESCAPE
+	mood_message = "<span class='bloody'>I feel unnerved being here.</span>\n"
+	mood_bonus = -1
+
+
 /area/maintenance/liminal/deep
 	name = "Liminal Deep"
 	icon_state = "engine_sm"
@@ -52,7 +69,7 @@
 	name = "Liminal Derelict"
 	icon_state = "engine_sm"
 	droning_sound = DRONING_LIMINALDERELICT
-	mood_message = "<span class='swarmer'>SO POOPDARK AND UKRANIANCORE!</span>\n"
+	mood_message = "<span class='swarmer'>It's fucked up here.</span>\n"
 	mood_bonus = 1
 
 /area/maintenance/liminal/darkclub
@@ -78,7 +95,6 @@
 /area/maintenance/liminal/train
 	name = "Liminal Train"
 	icon_state = "engine_sm"
-	droning_sound = DRONING_LIMINALTRAIN
 
 /area/maintenance/liminal/intro
 	name = "Liminal Introduction"
@@ -111,7 +127,6 @@
 
 /area/maintenance/liminal/boltduel
 	name = "Liminal Boltie Tunnels"
-	droning_sound = DRONING_LIMINALBOLT
 	ambience_index = AMBIENCE_ZEETHREE
 
 /area/maintenance/liminal/boltduel/mechanism
@@ -125,15 +140,13 @@
 
 /area/maintenance/liminal/divine
 	name = "Liminal Divine"
-	droning_sound = DRONING_DIVINE
 
 /area/maintenance/liminal/beattheboss
 	name = "Liminal Beat The Boss"
-	droning_sound = DRONING_BOSS
 
 /area/maintenance/liminal/denominator
 	name = "Denominator's Hideout"
-	droning_sound = DRONING_DENOMINATOR
+	droning_sound = DRONING_BARRACKS
 
 /area/maintenance/liminal/denominator/barracks
 	name = "Denominator's Barracks"
@@ -164,33 +177,15 @@
 /area/maintenance/liminal/intro/Entered(atom/movable/arrived, area/old_area, volume = 70)
 	. = ..()
 	var/mob/living/living_arrived = arrived
-	if(istype(living_arrived) && !HAS_TRAIT(living_arrived, TRAIT_PACIFISM))
+	if(istype(living_arrived))
 		//When a human enters the hallway, what happens?
 		ADD_TRAIT(living_arrived, TRAIT_PACIFISM, AREA_TRAIT)
-		//They become a soyjack
+		ADD_TRAIT(living_arrived, TRAIT_HEROIN_JUNKIE, AREA_TRAIT)
 
 /area/maintenance/liminal/intro/Exited(atom/movable/gone, direction, volume = 70)
 	. = ..()
 	var/mob/living/living_gone = gone
-	if(istype(living_gone) && HAS_TRAIT(living_gone, TRAIT_PACIFISM))
+	if(istype(living_gone))
 		//When a human exits the hallway, what happens?
 		REMOVE_TRAIT(living_gone, TRAIT_PACIFISM, AREA_TRAIT)
-		//They become a doomerjackxx
-
-/area/maintenance/liminal/intro/barracks/Entered(atom/movable/arrived, area/old_area, volume = 70)
-	. = ..()
-	var/mob/living/living_arrived = arrived
-	if(istype(living_arrived) && !HAS_TRAIT(living_arrived, TRAIT_PACIFISM))
-		//When a human enters the hallway, what happens?
-		ADD_TRAIT(living_arrived, TRAIT_PACIFISM, AREA_TRAIT)
-		//They become a soyjack
-		//But no sound
-
-/area/maintenance/liminal/intro/barracks/Exited(atom/movable/gone, direction, volume = 70)
-	. = ..()
-	var/mob/living/living_gone = gone
-	if(istype(living_gone) && HAS_TRAIT(living_gone, TRAIT_PACIFISM))
-		//When a human exits the hallway, what happens?
-		REMOVE_TRAIT(living_gone, TRAIT_PACIFISM, AREA_TRAIT)
-		//They become a doomerjackxx
-		//But no sound
+		REMOVE_TRAIT(living_gone, TRAIT_HEROIN_JUNKIE, AREA_TRAIT)

@@ -61,6 +61,14 @@
 #define TRAIT_DANCING "dancing"
 /// Currently a stupid schizophrenic gakster!
 #define TRAIT_GAKSTER "is_gakster"
+/// A tricky enthusiast/ripped a sign out before
+#define TRAIT_TRICKY "hoffnarr_type"
+/// Denominator safezone access
+#define TRAIT_DENOMINATOR_ACCESS "denominator_safezone_access"
+/// Denominator Shotgunner Rage
+#define TRAIT_DENOMINATOR_REDSCREEN "denominator_shotgunner_hud_effect"
+/// Immune to blacktar overdose as well as vomit
+#define TRAIT_HEROIN_JUNKIE "heroin_junkie"
 
 // ~BODYPART TRAITS
 /// Rotten beyond salvation
@@ -94,6 +102,8 @@
 #define EMOTE_TRAIT "emote"
 #define SUBMERGED_TRAIT "submerged"
 #define BODYPART_TRAIT "bodypart"
+#define MEGALOMANIAC_TRAIT "idiotic source"
+#define SAFEZONE_ACCESS "efn safezone access"
 
 /// Trait applied by component
 #define COMPONENT_TRAIT(source) "component_trait_[source]"

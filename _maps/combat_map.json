@@ -3,6 +3,8 @@
     "map_name": "Combat",
     "map_path": "_septic/map_files/Combat",
     "map_file": [
+		"CombatZ7.dmm",
+		"CombatZ6.dmm",
         "CombatZ5.dmm",
         "CombatZ4.dmm",
         "CombatZ3.dmm",
@@ -11,7 +13,7 @@
     ],
 	"station_name": "The Abandoned Warehouse",
 	"combat_map": true,
-    "everyone_is_fucking_naked": true,
+    "everyone_is_fucking_naked": false,
     "respawn_allowed": true,
     "overflow_role": "Gakster Scavenger",
     "space_ruin_levels": 0,
@@ -22,7 +24,7 @@
     "cave_empty_levels": 0,
     "shuttles": {
         "cargo": "cargo_baluarte",
-        "emergency": "emergency_baluarte"
+        "emergency": "emergency_efn"
     },
     "traits": [
         {
@@ -46,6 +48,20 @@
             "Baseturf": "/turf/open/openspace"
         },
         {
+            "Down": -1,
+            "Up": 1,
+            "Station": true,
+            "Gravity": true,
+            "Baseturf": "/turf/open/openspace"
+        },
+		{
+            "Down": -1,
+            "Up": 1,
+            "Station": true,
+            "Gravity": true,
+            "Baseturf": "/turf/open/openspace"
+        },
+		{
             "Down": -1,
             "Up": 1,
             "Station": true,

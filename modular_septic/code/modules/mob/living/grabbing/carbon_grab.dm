@@ -37,12 +37,18 @@
 	if(!affected)
 		to_chat(user, span_warning("[p_they(TRUE)] do[p_es()]n't have a [parse_zone(user.zone_selected)]!"))
 		return
+	if(HAS_TRAIT(user, TRAIT_PACIFISM))
+		to_chat(user, span_warning("Nuh uh!"))
+		return
 	var/hit_modifier = affected.grabbing_hit_modifier
-	//easy to kick people when they are down
-	if((body_position == LYING_DOWN) && (user.body_position != LYING_DOWN))
-		hit_modifier += 4
 	//very hard to miss when hidden by fov
 	if(!(src in fov_viewers(2, user)))
+		hit_modifier += 6
+	//easy to kick people when they are down
+	if((body_position == LYING_DOWN) && (user.body_position != LYING_DOWN))
+		hit_modifier += 6
+	//bro we dead :skull:
+	if(stat >= UNCONSCIOUS)
 		hit_modifier += 5
 	//epic grab fail
 	var/click_cooldown = (biting_grab ? CLICK_CD_BITING : CLICK_CD_GRABBING)
@@ -51,7 +57,7 @@
 	var/modifier = affected.grabbing_hit_modifier
 	if(biting_grab)
 		modifier -= 2
-	if((user != src) && (user.diceroll(skill_modifier+modifier) <= DICE_FAILURE))
+	if((user != src) && (user.diceroll(skill_modifier+modifier, context = DICE_CONTEXT_PHYSICAL) <= DICE_FAILURE))
 		user.visible_message(span_warning("<b>[user]</b> tries to [grab_wording] <b>[src]</b>!"), \
 				span_userdanger("I fail to [grab_wording] <b>[src]</b>!"), \
 				blind_message = span_hear("I hear some loud shuffling!"), \
@@ -80,7 +86,7 @@
 		var/grabber_strength = 0
 		if(istype(pulling_mob))
 			grabber_strength = GET_MOB_ATTRIBUTE_VALUE(pulling_mob, STAT_STRENGTH)
-		var/resist_diceroll = diceroll(CEILING(GET_MOB_ATTRIBUTE_VALUE(src, STAT_STRENGTH)*2, 1)-grabber_strength)
+		var/resist_diceroll = diceroll(CEILING(GET_MOB_ATTRIBUTE_VALUE(src, STAT_STRENGTH)*2, 1)-grabber_strength, context = DICE_CONTEXT_MENTAL)
 		var/grip_wording = (HAS_TRAIT_FROM(src, TRAIT_BITTEN, WEAKREF(pulledby)) ? "bite" : "grip")
 		if(resist_diceroll >= DICE_SUCCESS)
 			adjustFatigueLoss(5)

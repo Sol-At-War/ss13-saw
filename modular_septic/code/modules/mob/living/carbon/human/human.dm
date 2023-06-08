@@ -4,6 +4,7 @@
 	//values are quite low due to the way dirty clothing dirtifies you
 	set_germ_level(rand(GERM_LEVEL_START_MIN, GERM_LEVEL_START_MAX))
 	add_verb(src, /mob/living/carbon/human/proc/hide_furry_shit)
+	//hehe horny //FUCK YOURSELF RETARD
 	AddComponent(/datum/component/fixeye)
 	AddComponent(/datum/component/interactable)
 	AddComponent(/datum/component/babble)
@@ -43,6 +44,7 @@
 		if(CONSCIOUS)
 			if(. >= UNCONSCIOUS)
 				REMOVE_TRAIT(src, TRAIT_IMMOBILIZED, TRAIT_KNOCKEDOUT)
+				cure_blind(UNCONSCIOUS_TRAIT)
 			REMOVE_TRAIT(src, TRAIT_HANDS_BLOCKED, STAT_TRAIT)
 			REMOVE_TRAIT(src, TRAIT_INCAPACITATED, STAT_TRAIT)
 			REMOVE_TRAIT(src, TRAIT_FLOORED, STAT_TRAIT)
@@ -168,8 +170,7 @@
 			covering_part += item
 	return covering_part
 
-///Illiterate and proud
-/mob/living/carbon/human/is_literate()
+/mob/living/crbaon/human/is_literate()
 	if(HAS_TRAIT(src, TRAIT_ILLITERATE))
 		return FALSE
 	return TRUE

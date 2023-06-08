@@ -1,5 +1,5 @@
 /obj/item/clothing/suit/armor/kelzad
-	name = "\"Loucura\" type IV armored suit"
+	name = "Type IV armored suit"
 	desc = "A type IV armored suit for usage against entire rooms full of armored operatives. Manufactured by ITOBE."
 	icon = 'modular_septic/icons/obj/clothing/itobe.dmi'
 	icon_state = "karmor"
@@ -30,5 +30,5 @@
                 WOUND = 0, \
                 ORGAN = 0)
 	//Kelzad Enjoyers
-	carry_weight = 8
+	carry_weight = 8 KILOGRAMS
 	body_parts_covered = CHEST|GROIN|LEGS|FEET|ARMS|VITALS

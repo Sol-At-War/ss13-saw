@@ -7,17 +7,17 @@
 
 //Experimental change: These are subject to tweaking based on the /tg/ economy overhaul.
 //Current design direction: Higher paying jobs are vastly outnumbered by lower paying jobs, so anything above medium hurts inflation, common jobs help inflation
-#define PAYCHECK_PRISONER 25
-#define PAYCHECK_ASSISTANT 50
-#define PAYCHECK_MINIMAL 55
-#define PAYCHECK_EASY 60
-#define PAYCHECK_MEDIUM 75
-#define PAYCHECK_HARD 100
-#define PAYCHECK_COMMAND 200
+#define PAYCHECK_PRISONER 0
+#define PAYCHECK_ASSISTANT 0
+#define PAYCHECK_MINIMAL 0
+#define PAYCHECK_EASY 0
+#define PAYCHECK_MEDIUM 0
+#define PAYCHECK_HARD 0
+#define PAYCHECK_COMMAND 0
 
 #define STATION_TARGET_BUFFER 40
 
-#define MAX_GRANT_DPT 500
+#define MAX_GRANT_DPT 50
 
 //What should vending machines charge when you buy something in-department.
 #define VENDING_DISCOUNT 0.2

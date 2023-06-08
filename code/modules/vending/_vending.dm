@@ -439,8 +439,12 @@ GLOBAL_LIST_EMPTY(vending_products)
 	return TRUE
 
 /obj/machinery/vending/attackby(obj/item/I, mob/living/user, params)
-	if(panel_open && is_wire_tool(I))
-		wires.interact(user)
+	var/list/modifiers = params2list(params)
+	if(is_wire_tool(I) && !IS_HARM_INTENT(user, modifiers))
+		if(panel_open)
+			attempt_wire_interaction(user)
+		else
+			attempt_hacking_interaction(user)
 		return
 
 	if(refill_canister && istype(I, refill_canister))
@@ -461,9 +465,11 @@ GLOBAL_LIST_EMPTY(vending_products)
 				else
 					to_chat(user, span_warning("There's nothing to restock!"))
 			return
-	//if(compartmentLoadAccessCheck(user) && !user.combat_mode) //SEPTIC EDIT REMOVAL
+	/* SEPTIC EDIT REMOVAL
+	if(compartmentLoadAccessCheck(user) && !user.combat_mode)
+	*/
 	//SEPTIC EDIT BEGIN
-	if(compartmentLoadAccessCheck(user) && IS_HELP_INTENT(user, params2list(params)))
+	if(compartmentLoadAccessCheck(user) && IS_HELP_INTENT(user, modifiers))
 	//SEPTIC EDIT END
 		if(canLoadItem(I))
 			loadingAttempt(I,user)
@@ -497,10 +503,6 @@ GLOBAL_LIST_EMPTY(vending_products)
 					freebie(user, 2)
 				if(16 to 25)
 					freebie(user, 1)
-				if(76 to 90)
-					tilt(user)
-				if(91 to 100)
-					tilt(user, crit=TRUE)
 
 /obj/machinery/vending/proc/freebie(mob/fatty, freebies)
 	visible_message(span_notice("[src] yields [freebies > 1 ? "several free goodies" : "a free goody"]!"))
@@ -964,7 +966,7 @@ GLOBAL_LIST_EMPTY(vending_products)
 		seconds_electrified--
 
 	//Pitch to the people!  Really sell it!
-	if(last_slogan + slogan_delay <= world.time && slogan_list.len > 0 && !shut_up && DT_PROB(2.5, delta_time))
+	if(last_slogan + slogan_delay <= world.time && slogan_list.len > 0 && !shut_up && DT_PROB(3, delta_time))
 		var/slogan = pick(slogan_list)
 		speak(slogan)
 		last_slogan = world.time

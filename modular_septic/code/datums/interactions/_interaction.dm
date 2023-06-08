@@ -21,11 +21,6 @@
 	var/user_cooldown_duration = 0
 	var/target_cooldown_duraction = 0
 
-	var/arousal_gain_user = AROUSAL_GAIN_NONE
-	var/arousal_gain_target = AROUSAL_GAIN_NONE
-	var/lust_gain_user = LUST_GAIN_NONE
-	var/lust_gain_target = LUST_GAIN_NONE
-
 	var/maximum_distance = 1
 	var/maximum_tk_distance = 7
 	var/user_hands_required = 0

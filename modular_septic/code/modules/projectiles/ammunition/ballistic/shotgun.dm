@@ -1,7 +1,7 @@
 /obj/item/ammo_casing/shotgun
-	icon_state = "12gauge"
-	base_icon_state = "12gauge"
-	world_icon_state = "gshell"
+	icon_state = "12gauge_slug"
+	base_icon_state = "12gauge_slug"
+	world_icon_state = "gshells"
 	bounce_sound = list('modular_septic/sound/weapons/guns/shotgun/12cal1.wav', 'modular_septic/sound/weapons/guns/shotgun/12cal2.wav', 'modular_septic/sound/weapons/guns/shotgun/12cal3.wav')
 	bounce_volume = 45
 	stack_type = /obj/item/ammo_box/magazine/ammo_stack/shotgun

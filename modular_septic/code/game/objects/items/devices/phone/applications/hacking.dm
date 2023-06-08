@@ -63,8 +63,8 @@
 	else if(input == virus_option)
 		toggle_infectivity(user)
 
-/datum/simcard_application/hacking/proc/ddos_niggas(mob/living/user)
-	var/input = tgui_input_list(user, "Who needs a lesson in humility?", "DDoS NIGGAS", GLOB.active_public_simcard_list)
+/datum/simcard_application/hacking/proc/ddos_them(mob/living/user)
+	var/input = tgui_input_list(user, "Who needs a lesson in humility?", "DDoS Them", GLOB.active_public_simcard_list)
 	if(!input)
 		to_chat(user, span_warning("Nevermind."))
 		return
@@ -125,8 +125,8 @@
 	var/title = "Immediate Users"
 	var/message = "Some guys really shouldn't have phones."
 	if(ishuman(user))
-		var/mob/living/carbon/human/nigga = user
-		if(nigga.dna?.species?.id == SPECIES_INBORN)
+		var/mob/living/carbon/human/target = user
+		if(target.dna?.species?.id == SPECIES_INBORN)
 			title = "POTENTIAL FRIENDSHIPS"
 			message = uppertext(message)
 	var/ping_input = tgui_input_list(user, title, message, near_phones)

@@ -2,7 +2,6 @@
 	/// For punctuation forcing
 	var/static/regex/punctuation_filter_regex
 	var/static/regex/punctuation_filter_bypass_regex
-	/// Prevents "NiggaMaster420" from joining
 	var/static/regex/ckey_filter
 	/// Prevents characters with dumb names
 	var/static/regex/name_filter

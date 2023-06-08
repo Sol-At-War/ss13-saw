@@ -1,4 +1,4 @@
-// asystole or no lung niggas cant emote proper
+// asystole or no lung cant emote proper
 /mob/living/carbon/say(message, bubble_type, list/spans = list(), sanitize = TRUE, datum/language/language = null, ignore_spam = FALSE, forced = null, filterproof = null)
 	var/lung_efficiency = getorganslotefficiency(ORGAN_SLOT_LUNGS)
 	if(undergoing_cardiac_arrest() || losebreath || (needs_lungs() && (lung_efficiency < ORGAN_FAILING_EFFICIENCY)))

@@ -57,15 +57,6 @@
         /obj/item/toothbrush = 1
     )
 
-/datum/bartering_recipe/niggergun
-    outputs = list(
-        /obj/item/gun/ballistic/shotgun/ithaca = 1,
-		/obj/item/storage/box/c12buckshot = 1
-    )
-    inputs = list(
-        /obj/item/circuitboard = 1
-    )
-
 /datum/bartering_recipe/abyss
     outputs = list(
         /obj/item/gun/ballistic/automatic/remis/abyss = 1,
@@ -175,14 +166,6 @@
     )
     inputs = list(
         /obj/item/toy/beach_ball/holoball = 1
-    )
-
-/datum/bartering_recipe/slaughtergoggle
-    outputs = list(
-        /obj/item/clothing/glasses/sunglasses/slaughter = 1
-    )
-    inputs = list(
-        /obj/item/crowbar = 1
     )
 
 /datum/bartering_recipe/ultraheavy

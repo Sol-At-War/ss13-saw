@@ -19,7 +19,7 @@
 	maxHealth = STANDARD_ORGAN_THRESHOLD * 0.5 // weak to mirror real life
 	high_threshold = STANDARD_ORGAN_THRESHOLD * 0.4
 	low_threshold =  STANDARD_ORGAN_THRESHOLD * 0.1
-	healing_factor = 0 // just cut this nigga out lmao
+	healing_factor = 0 // just cut this out lmao
 
 	now_failing = span_warning("An explosion of pain erupts in my lower right abdomen!")
 	now_fixed = span_info("The pain in my abdomen has subsided.")

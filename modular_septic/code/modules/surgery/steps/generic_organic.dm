@@ -24,7 +24,7 @@
 
 /datum/surgery_step/incise/validate_target(mob/living/target, mob/user)
 	. = ..()
-	if(!.) //nah nigga lol
+	if(!.) //nah lol
 		return FALSE
 	var/mob/living/carbon/C = target
 	var/obj/item/bodypart/BP = C.get_bodypart(user.zone_selected)
@@ -113,7 +113,7 @@
 
 /datum/surgery_step/retract_skin/validate_target(mob/living/target, mob/user)
 	. = ..()
-	if(!.) //nah nigga lol
+	if(!.) //nah lol
 		return FALSE
 	var/mob/living/carbon/C = target
 	var/obj/item/bodypart/BP = C.get_bodypart(user.zone_selected)
@@ -160,7 +160,7 @@
 
 /datum/surgery_step/saw/validate_target(mob/living/target, mob/user)
 	. = ..()
-	if(!.) //nah nigga lol
+	if(!.) //nah lol
 		return FALSE
 	var/mob/living/carbon/C = target
 	var/obj/item/bodypart/BP = C.get_bodypart(check_zone(user.zone_selected))
@@ -179,7 +179,7 @@
 		span_notice("I saw [target]'s [parse_zone(target_zone)] open."), \
 		span_notice("[user] saws [target]'s [parse_zone(target_zone)] open!"), \
 		span_notice("[user] saws [target]'s [parse_zone(target_zone)] open!"))
-	//oh GOD oh fuck we need to break this nigga's limb to continue surgery
+	//oh GOD oh fuck we need to break their limb to continue surgery
 	var/mob/living/carbon/C = target
 	var/obj/item/bodypart/BP = C.get_bodypart(target_zone)
 	if(!BP.is_fractured())
@@ -201,7 +201,7 @@
 
 /datum/surgery_step/drill/validate_target(mob/living/target, mob/user)
 	. = ..()
-	if(!.) //nah nigga lol
+	if(!.) //nah lol
 		return FALSE
 	var/mob/living/carbon/C = target
 	var/obj/item/bodypart/BP = C.get_bodypart(user.zone_selected)
@@ -240,7 +240,7 @@
 
 /datum/surgery_step/close/validate_target(mob/living/target, mob/user)
 	. = ..()
-	if(!.) //nah nigga lol
+	if(!.) //nah lol
 		return FALSE
 	var/mob/living/carbon/C = target
 	var/obj/item/bodypart/BP = C.get_bodypart(user.zone_selected)

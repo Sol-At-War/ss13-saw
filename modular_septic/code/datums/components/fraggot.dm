@@ -63,10 +63,6 @@
 		to_chat(our_fraggot, span_horny(span_big(message)))
 		var/static/list/fraggot_sounds = list(
 			'modular_septic/sound/memeshit/pigdeath.ogg',
-			'modular_septic/sound/memeshit/naggers.ogg',
-			'modular_septic/sound/memeshit/nigger.ogg',
-			'modular_septic/sound/memeshit/niggers.ogg',
-			'modular_septic/sound/memeshit/nigger_alarm.ogg',
 			'modular_septic/sound/memeshit/augh.ogg',
 			'modular_septic/sound/memeshit/loudnigra.ogg',
 			'modular_septic/sound/memeshit/socialcreditsdeducted.ogg',

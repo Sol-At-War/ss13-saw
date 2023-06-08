@@ -8,7 +8,6 @@
 #define MEDAL_FUNKYTOWN "Funkytown"
 #define MEDAL_LEADPIPE "Lead Pipe"
 #define MEDAL_FAGGOT "Faggot"
-#define MEDAL_SECRETPHRASE "Secret Phrase"
 #define MEDAL_MEUDEUS "MEU DEUS"
 #define MEDAL_IMFUCKED "Fucked"
 

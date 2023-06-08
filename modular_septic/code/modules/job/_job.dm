@@ -33,9 +33,6 @@
 		//lemun
 		if(player_client?.ckey == "ltkoepple")
 			spawned.put_in_hands(new /obj/item/food/grown/citrus/lemon(spawned.drop_location()), FALSE)
-		//chipraps plushie
-		if(spawned.ckey == "chrapacz2000")
-			spawned.put_in_hands(new /obj/item/toy/plush/chipraps(spawned.drop_location()), FALSE)
 		//ilovelean
 		if(player_client?.ckey == "shyshadow")
 			spawned.put_in_hands(new /obj/item/reagent_containers/glass/bottle/lean(spawned.drop_location()), FALSE)

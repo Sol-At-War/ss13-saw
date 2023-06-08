@@ -46,12 +46,6 @@
 	database_id = MEDAL_LEADPIPE
 	achievement_quality = ACHIEVEMENT_GOOD
 
-/datum/award/achievement/misc/secretphrase
-	name = "Secret Phrase"
-	desc = "You actually said it, funny guy!"
-	database_id = MEDAL_SECRETPHRASE
-	achievement_quality = ACHIEVEMENT_BAD
-
 /datum/award/achievement/misc/meudeus
 	name = "MEU DEUS"
 	desc = "Somehow end up examining a 40mm grenade as It's coming at you."

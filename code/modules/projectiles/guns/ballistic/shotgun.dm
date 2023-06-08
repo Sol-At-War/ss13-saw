@@ -169,7 +169,7 @@
 	semi_auto = TRUE
 	bolt_type = BOLT_TYPE_NO_BOLT
 	can_be_sawn_off = TRUE
-	pb_knockback = 3 // it's a super shotgun! //SHUT UP RETARD
+	pb_knockback = 3 // it's a super shotgun!
 
 /* SEPTIC EDIT REMOVAL
 /obj/item/gun/ballistic/shotgun/doublebarrel/AltClick(mob/user)

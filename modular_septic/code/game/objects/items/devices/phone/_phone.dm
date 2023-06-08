@@ -314,7 +314,7 @@
 					return
 				if(friend_card == simcard)
 					to_chat(user, span_warning("Haha wouldn't it be FUNNY if I called myself? \
-											I'm a fucking dent-brained good for nothing retard. \
+											I'm a fucking dent-brained good for nothing idiot. \
 											My father abandoned me for good fucking reason. \
 											What the hell is wrong with me?"))
 					return

@@ -32,7 +32,7 @@
 
 	/// This is stuff
 	var/damage_threshold_value = BRAIN_DAMAGE_DEATH/10
-	/// Suicide is fucking retarded
+	/// Suicide is bad
 	var/suicided = FALSE
 	/// The actual mob, if for some reason the brain got lobbed off
 	var/mob/living/brain/brainmob

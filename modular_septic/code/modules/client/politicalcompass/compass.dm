@@ -154,7 +154,7 @@
 
 /datum/political_compass/proc/get_result()
 	if(!length(questions_answered))
-		return "Apolitical Retard"
+		return "Apolitical"
 	var/progressive = "Centrist"
 	var/authoritarian = "Centrist"
 	var/rightist = "Centrist"

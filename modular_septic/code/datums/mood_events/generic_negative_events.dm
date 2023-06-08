@@ -17,7 +17,7 @@
 	timeout = 5 MINUTES
 
 /datum/mood_event/ultracringe
-	description = span_boldwarning("I am fucking retarded!")
+	description = span_boldwarning("Yikes.")
 	mood_change = -8
 	timeout = 15 MINUTES
 
